@@ -1,0 +1,60 @@
+---
+title: "Introducción a Rmarkdown"
+author: "Miguel Escalante"
+output:
+  html_document:
+    toc: true
+    toc_depth: 3
+    toc_float: true
+    theme: spacelab
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{R ,cache=TRUE}
+Sys.sleep(10)
+print('holaaa!!!')
+```
+## R Markdown
+
+Se basa en el formato de markdown pero permite generar documentos con código de R que se convierte en HTML, PDF (con latex abajo: entonces permite presentaciones de beamer también) y MS Word.
+
+La documentación de rmarkdown es muy amplia y de las mejores la tiene Rstudio <http://rmarkdown.rstudio.com>.
+
+Para insertar codigo de R se pueden hacer lo que se conoce como "chunks" que se inician igual que en markdown, con tres acentos invertidos.
+
+	```{r cars}
+summary(cars)
+```
+
+## Incluye gráficos
+
+Por ejemplo:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Las opciones globales de los chunks se pueden cambiar para cada uno de ellos al pegarle opciones como  `echo = FALSE`. Este parámetro impide que se imprima el código que genera el gráfico.
+
+No necesitas Rstudio para utilizarlo pero lo facilita mucho.
+
+## Lenguajes
+
+### Python!
+
+```{python, eval = Sys.which("python") != "", python.reticulate = requireNamespace("reticulate", quietly = TRUE)}
+x = 'hello, python world!'
+print(x.split(' '))
+```
+
+### Bash!
+
+```{bash, eval = Sys.which("bash") != ""}
+echo "Hello Bash!";
+pwd;
+ls | head;
+
+```

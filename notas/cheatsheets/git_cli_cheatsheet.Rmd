@@ -1,0 +1,213 @@
+---
+title: "Introducción a Línea de Comandos"
+
+output:
+  html_document:
+    toc: yes
+    toc_depth: 2
+    toc_float: true
+    theme: spacelab
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Comandos útiles en línea de comandos
+## `pwd`
+
+Imprime el directorio en el que estás actualmente
+
+```{bash}
+pwd
+```
+
+## `ls`
+
+Comando que lista los archivos del directorio donde estás.
+
+```{bash}
+ls
+```
+
+## `mkdir`
+
+Make directory, crea un directorio.
+
+```{bash}
+mkdir -p directorioPrueba
+```
+
+Este comando no regresa ningún resultado, para verificar que se hizo lo que pedimos, usamos el comando `ls`
+
+```{bash}
+ls
+```
+
+## `cd`
+
+Change directory, te mueve de directorio. Este comando tampoco regresa ningún resultado, de nuevo, para verificar que cambiamos de directorio podemos usar `pwd`.
+
+```{bash}
+cd directorioPrueba
+pwd
+```
+
+
+El directorio inmediatamente superior al directorio donde estamos en bash se denota como `..`. Entonces para subir un directorio escribimos:
+
+```{bash}
+cd ..
+```
+
+Y de nuevo no tenemos resultado, simplemente debemos volver a escribir `pwd`, o listamos los archivos del directorio donde quedamos :).
+
+```{bash}
+pwd
+```
+
+```{bash}
+ls
+```
+
+## `touch`
+
+Es un comando para crear un archivo vacío
+Entramos al directorio y creamos un archivo prueba.txt, y checamos que de hecho se creara
+
+```{bash}
+cd directorioPrueba
+touch prueba.txt
+ls
+```
+
+Efectivamente se creó.
+
+## `echo`
+Comando para imprimir en pantalla lo que se le mande
+
+```{bash}
+echo "Hola! Buenos días!"
+```
+
+## `>`
+este es un operador que le llamamos `pipe`
+Esto hace que lo que salga del lado izquierdo, se imprima al lado derecho.
+
+```{bash}
+cd directorioPrueba # Esto no lo corras, corre a partir de la siguiente línea
+echo "Esta línea aparecerá en su archivo" > prueba.txt
+```
+
+Esto no nos regresa ningún resultado pero podemos usar un comando más:
+
+## `cat`
+Imprime los contenidos de un Archivo
+
+```{bash}
+cd directorioPrueba # Esto no lo corras, corre a partir de la siguiente línea
+cat prueba.txt
+```
+
+Y si abren el archivo desde Rstudio podrán verlo.
+
+## TL;DR Cli
++ `pwd` Imprime el directorio en el que estás actualmente.
++ `ls`  Comando que lista los archivos del directorio donde estás.
++ `mkdir` Make directory, crea un directorio.
++ `cd`  Change directory, te mueve de directorio.
++ `touch` es un comando para crear un archivo vacío.
++ `echo` Comando para imprimir en pantalla lo que se le mande.
++ `>` este es un operador que le llamamos `pipe`.
++ `cat` Imprime los contenidos de un Archivo
+
+# Cheatsheet git
+
+Verificamos que estamos en la carpeta correcta
+
+```{bash}
+cd directorioPrueba # Esto no lo corras, corre a partir de la siguiente línea
+pwd 
+```
+
+Generamos un nuevo repositorio (local) en nuestra carpeta de prueba
+
+```{bash}
+cd directorioPrueba # Esto no lo corras, corre a partir de la siguiente línea
+git init
+```
+
+
+Verificamos que esté funcional, y que tengamos un archivo sin commitear.
+```{bash}
+cd directorioPrueba # Esto no lo corras, corre a partir de la siguiente línea
+git status
+```
+
+# Add
+Agregamos un archivo para poderlo comitear después.
+```{bash}
+cd directorioPrueba # Esto no lo corras, corre a partir de la siguiente línea
+git add prueba.txt
+git status
+```
+
+# Commit
+Hacemos el commit y esto hace que se quede guardado en la 'historia' de git.
+```{bash}
+cd directorioPrueba # Esto no lo corras, corre a partir de la siguiente línea
+git commit -m 'Prueba!!'
+```
+
+Así se ve el mensaje cuando tienen el directorio limpio y sin cambios.
+```{bash}
+cd directorioPrueba # Esto no lo corras, corre a partir de la siguiente línea
+git status
+```
+
+# Diff
+Nos muestra las diferencias entre la versión que tenemos en el commit y la versión que hemos modificado.
+```{bash}
+cd directorioPrueba # Esto no lo corras, corre a partir de la siguiente línea
+echo "nueva línea" > prueba.txt
+git diff
+```
+
+Si agregamos la bandera `--staged`, nos da las diferencias con lo que esta en `staging`.
+```{bash}
+cd directorioPrueba # Esto no lo corras, corre a partir de la siguiente línea
+git diff --staged
+```
+Acá se ve el diff después de hacer el stage.
+```{bash}
+cd directorioPrueba # Esto no lo corras, corre a partir de la siguiente línea
+git add prueba.txt
+git diff --staged
+```
+
+# Log
+
+Nos muestra todos los commits que se han hecho en un repositorio.
+```{bash}
+cd directorioPrueba # Esto no lo corras, corre a partir de la siguiente línea
+echo "nueva línea1" > prueba.txt
+git add prueba.txt
+git commit -m 'Actualización prueba.txt'
+git log
+```
+
+Además podemos especificar un archivo particular para saber los commits que han hecho modificaciones a determinado archivo
+```{bash}
+cd directorioPrueba # Esto no lo corras, corre a partir de la siguiente línea
+echo "nueva línea1" > prueba2.txt
+git add prueba.txt
+git commit -m 'Nueva prueba'
+git log prueba2.txt
+```
+
+
+
+```{bash}
+rm -rf directorioPrueba
+```

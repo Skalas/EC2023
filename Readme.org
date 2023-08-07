@@ -1,6 +1,7 @@
 #+Author: Prof. Miguel Angel Escalante Serrato
 #+title: Estadística Computacional
 #+email: miguel.escalante@itam.mx
+
 * Introducción
 Este es el repositorio con el contenido del curso Estadística Computacional  de la Maestría en Ciencia de Datos del ITAM impartido por el Prof. Miguel Escalante.
 
@@ -17,9 +18,6 @@ Este es el repositorio con el contenido del curso Estadística Computacional  de
 
 ** ¿Meaning?
 El objetivo en pocas palabras es que construyan capacidades técnicas de programación básicas para afrontar problemas asociados a la ciencia de datos, este es un curso introductorio pero me gusta profundizar en los temas que vemos, por lo que ...
-#+name: Welcome
-#+attr_html: :width 800 :align center
-[[file:img/welcome.png]]
 
 * ¿Cómo será el curso?
 
@@ -39,17 +37,9 @@ Escribe a ~miguel.escalante@itam.mx~ y por favor que el subject del correo diga 
 * Temario
 
 - Git + Github + Git flow
-- R
-  - Basics
-  - Rproj
-  - Dplyr
-  - Rmarkdown
-  - Shiny
-  - Visualización
-- Python
-  - Pandas
-  - Flask
-  - Dash
+- Docker
+  - basics
+  - docker-compose
 - Cli
   - pipe
   - SED
@@ -60,13 +50,21 @@ Escribe a ~miguel.escalante@itam.mx~ y por favor que el subject del correo diga 
   - Basics
   - Joins
   - Inserts
-- Docker
-  - basics
-  - docker-compose
+- Python
+  - Pandas
+  - Flask
+  - Dash
 - Aws
   - EC2
   - S3
   - RDS
+- R
+  - Basics
+  - Rproj
+  - Dplyr
+  - Rmarkdown
+  - Shiny
+  - Visualización
 
 
 * Evaluación
