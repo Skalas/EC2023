@@ -1,0 +1,88 @@
+#+TITLE: SQL
+#+AUTHOR: Miguel Angel Escalante Serrato
+#+EMAIL:  miguel.escalante@itam.mx
+#+DATE: 9-Nov-21
+#+LANGUAGE:  es
+#+OPTIONS: num:nil toc:nil
+#+REVEAL_THEME: moon
+#+REVEAL_ROOT: https://cdn.jsdelivr.net/npm/reveal.js
+#+REVEAL_TRANS: cube
+#+REVEAL_SLIDE_NUMBER: t
+#+REVEAL_HEAD_PREAMBLE: <meta name="description" content="Estadística Computacional">
+#+PROPERTY: header-args:R :session R
+
+Para las pruebas necesitamos un ambiente de docker que pueda ser reemplazable. Para ello genero un nuevo contenedor con datos persistidos en la carpeta data dentro de sql.
+
+#+begin_src shell
+  docker volume create postgresql-data
+  docker stop postgres
+  docker rm postgres
+  docker run -p 5432:5432 \
+         -v postgresql-data:/var/lib/postgresql/data \
+         -e POSTGRES_PASSWORD=postgres \
+         --name postgres \
+         -d postgres
+#+end_src
+
+#+begin_src shell
+  docker exec -it postgres\
+         psql -h 0.0.0.0 \
+         -d postgres \
+         -U postgres
+#+end_src
+
+Ahora pondré datos dummies en la base de datos con el script que ya teníamos de la clase de R
+
+#+begin_src R :session R
+  library(dbplyr)
+  library(dplyr)
+  con <- DBI::dbConnect(RPostgreSQL::PostgreSQL(),
+    host = "0.0.0.0",
+    user = "postgres",
+    password = 'postgres'
+    )
+  copy_to(
+    con, nycflights13::flights, "flights",
+    overwrite=TRUE, temporary = FALSE,
+    indexes = list(
+        c("year", "month", "day"),
+        "carrier",
+        "tailnum",
+        "dest"
+    )
+  )
+  copy_to(
+    con, nycflights13::airports, "airport",
+    overwrite=TRUE, temporary = FALSE
+  )
+  copy_to(
+    con, nycflights13::weather, "weather",
+    overwrite=TRUE, temporary = FALSE
+  )
+  copy_to(
+    con, nycflights13::planes, "planes",
+    overwrite=TRUE, temporary = FALSE
+  )
+  copy_to(
+    con, nycflights13::airlines, "airlines",
+    overwrite=TRUE, temporary = FALSE
+  )
+#+end_src
+
+#+RESULTS:
+| 9E | Endeavor Air Inc.           |
+| AA | American Airlines Inc.      |
+| AS | Alaska Airlines Inc.        |
+| B6 | JetBlue Airways             |
+| DL | Delta Air Lines Inc.        |
+| EV | ExpressJet Airlines Inc.    |
+| F9 | Frontier Airlines Inc.      |
+| FL | AirTran Airways Corporation |
+| HA | Hawaiian Airlines Inc.      |
+| MQ | Envoy Air                   |
+| OO | SkyWest Airlines Inc.       |
+| UA | United Air Lines Inc.       |
+| US | US Airways Inc.             |
+| VX | Virgin America              |
+| WN | Southwest Airlines Co.      |
+| YV | Mesa Airlines Inc.          |
