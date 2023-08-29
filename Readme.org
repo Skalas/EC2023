@@ -32,7 +32,7 @@ El objetivo en pocas palabras es que construyan capacidades técnicas de program
 ** Correo
 Escribe a ~miguel.escalante@itam.mx~ y por favor que el subject del correo diga ~[Estadística Computacional 2023]~.
 ** Discord
-[[https://discord.gg/p34FEg6h][Link acá]]
+[[https://discord.gg/mDB32DZJ][Link Acá.]]
 
 * Temario
 
