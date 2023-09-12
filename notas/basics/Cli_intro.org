@@ -48,9 +48,11 @@ Muchos de los comandos del *CLI* o ~shell~ tienen que ver con la manipulación d
 
 - Inicia una sesión en ~docker~
 - Deberías de ver algo como esto:
-~~~
-jovyan@6ddfd57cc4ec:/#
-#+end_src
+  #+begin_src shell
+    jovyan@6ddfd57cc4ec:/#
+
+  #+end_src
+
 - Teclea ~whoami~ y luego presiona *enter*. Este comando te dice que
 usuario eres. Observa que el usuario actual es ~jovyan~.
 
@@ -95,8 +97,8 @@ al usuario ~jovyan~.
 - Para crear un directorio existe el comando ~mkdir~ que recibe como
   parámetro un nombre de archivo.
   - Crea la carpeta ~test~. Entra a ella. ¿Qué hay dentro de ella?
-- Vamos a crear un archivo de texto, para esto usaremos **GNU
-Emacs**. **GNU Emacs** es un editor de textos muy poderoso. Lo
+- Vamos a crear un archivo de texto, para esto usaremos *GNU
+Emacs*. *GNU Emacs* es un editor de textos muy poderoso. Lo
 aprenderemos en la clase (y quizá en algún seminario). Por el momento
 teclea ~emacs hola.txt~ y presiona enter (la primera vez que lo corras
 puede tardar mucho, está instalando toda la configuración para la
