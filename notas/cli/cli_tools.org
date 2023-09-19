@@ -1,0 +1,510 @@
+#+TITLE: Herramientas CLI
+#+AUTHOR: Miguel Angel Escalante Serrato
+#+EMAIL:  miguel.escalante@itam.mx
+#+DATE: 26-Oct-2020
+#+LANGUAGE:  es
+#+OPTIONS: num:nil toc:nil
+#+REVEAL_THEME: moon
+#+REVEAL_ROOT: https://cdn.jsdelivr.net/npm/reveal.js
+#+REVEAL_TRANS: cube
+#+REVEAL_SLIDE_NUMBER: t
+#+REVEAL_HEAD_PREAMBLE: <meta name="description" content="Estadística Computacional">
+
+* cut
+
+Es un programa que toma un caracter que mandemos en el parámetro =-d= y lo imprime a STDOUT.
+** Bytes
+#+begin_src shell
+cat test.log | cut -b 1-2> test-out.log
+#+end_src
+
+#+RESULTS:
+
+** characters
+
+#+begin_src shell
+  echo "lol,lel,lil,lul,lal" | cut -c 2-10
+#+end_src
+
+#+RESULTS:
+| ol | lel | li |
+
+** Delimiter, Field.
+=-d=  nos dice qué caracter usaremos para hacer los cortes, y el parámetro =-f= nos dice con qué columnas nos quedaremos.
+
+#+begin_src shell
+echo "lol,lel,lil,lul,lal" | cut -d ',' -f3
+#+end_src
+
+#+RESULTS:
+: lil
+
+#+begin_src shell
+echo "lol,lel,lil,lul,lal" | cut -d ','  -f 4,5,1,2
+#+end_src
+
+#+RESULTS:
+| lol | lel | lul | lal |
+
+#+begin_src shell
+echo "lol,lel,lil,lul,lal" | cut -d ','  -f 1-4
+#+end_src
+
+#+RESULTS:
+| lol | lel | lil | lul |
+
+** Complement
+
+Nos da el complemento de las columnas que mandemos :
+#+begin_src shell
+echo "lol,lel,lil,lul,lal" | cut --complement  -d ',' -f 1,2,3
+#+end_src
+
+#+RESULTS:
+| lul | lal |
+
+** Output Delimiter:
+#+begin_src shell
+echo "lol,lel,lil,lul,lal" | cut --complement  -d ',' -f 1 --output-delimiter="@"
+#+end_src
+
+#+RESULTS:
+: lel@lil@lul@lal
+
+#+begin_src shell
+  cat test.log | cut -d':' -f 3 | cut -d ';' -f 2| sort | uniq > ejercicio.log
+#+end_src
+
+* sed
+Stream Editor, es un editor de texto /on-the-go/, el uso más común es reemplazar textos, pero puede hacer mucho más.
+** Sustitución.
+
+#+begin_src shell
+  cat kernel.log | sed 's/evdi/@HOLA@/g' > result.log
+#+end_src
+
+#+RESULTS:
+
+** Reemplazar la n-ésima ocurrencia en un archivo.
+
+Sed trabaja línea a línea por lo que para poder reemplazar la n-ésima ocurrencia de un texto, lo hace a nivel línea.
+
+#+begin_src shell
+  cat kernel.log | sed 's/:/@HOLA@/1' > result.log
+#+end_src
+
+#+RESULTS:
+
+concatenando comandos:
+
+#+begin_src shell
+  cat kernel.log | sed 's/:/@HOLA@/2g' > result.log
+#+end_src
+
+#+RESULTS:
+
+** Elegit una línea particular a sustituír.
+
+#+begin_src shell
+
+  cat kernel.log | sed '3 s/:/@HOLA@/g' > result.log
+#+end_src
+
+#+RESULTS:
+
+#+begin_src shell
+  sed '3 s/:/@HOLA/g' kernel.log > result.log
+#+end_src
+
+#+RESULTS:
+
+#+begin_src shell
+  sed 's/pop/@hola@/g' kernel.log > result.log
+#+end_src
+
+#+begin_src shell
+  sed '2,$ s/:/@HOLA@/3g' < kernel.log > result.log
+#+end_src
+
+#+RESULTS:
+
+** Doble o nada :P
+
+la bandera =p= al final permite que se reimprima la línea en la cual se sustituyó el texto encontrado, ojo que si encuentra varias sustituciones sólo la repite una vez.
+
+#+begin_src shell
+  echo `wc -l kernel.log`
+  sed 's/:/@HOLA@/p' < kernel.log > result.log
+  echo `wc -l result.log`
+#+end_src
+
+#+RESULTS:
+|  6022 | kernel.log |
+| 12044 | result.log |
+
+
+A menos que sólo quieras generar la impresión de sólo las que tuvieron sustitución.
+#+begin_src shell
+  echo `wc -l kernel.log`
+  sed -n '3 s/:/@HOLA@/pg' < kernel.log > result.log
+  echo `wc -l result.log`
+#+end_src
+
+#+RESULTS:
+| 6022 | kernel.log |
+|    1 | result.log |
+
+** Rangos sobre las sustituciones
+#+begin_src shell
+  echo `wc -l kernel.log`
+  sed -n '10,$ s/:/@HOLA@/p' < kernel.log > result.log
+  echo `wc -l result.log`
+#+end_src
+
+#+RESULTS:
+| 6022 | kernel.log |
+| 6013 | result.log |
+
+**  Borrado de líneas!
+*** Podemos borrar una línea del archivo.
+#+begin_src shell
+  echo `wc -l kernel.log`
+  sed  '1d' < kernel.log > result.log
+  echo `wc -l result.log`
+#+end_src
+
+#+RESULTS:
+| 6022 | kernel.log |
+| 6021 | result.log |
+
+
+*** O la última:
+#+begin_src shell
+  echo `wc -l kernel.log`
+  sed  '$d' < kernel.log > result.log
+  echo `wc -l result.log`
+#+end_src
+
+#+RESULTS:
+| 6022 | kernel.log   |
+| 6021 | result-d.log |
+
+*** O un rango:
+#+begin_src shell
+  echo `wc -l kernel.log`
+  sed  '1,10d' < kernel.log > result-d.log
+  echo `wc -l result-d.log`
+#+end_src
+
+#+RESULTS:
+| 6022 | kernel.log   |
+| 6012 | result-d.log |
+
+*** O de la n-ésima a la última:
+#+begin_src shell
+  echo `wc -l kernel.log`
+  sed  '501,$d' < kernel.log > result-d.log
+  echo `wc -l result-d.log`
+#+end_src
+
+#+RESULTS:
+| 6022 | kernel.log   |
+|  500 | result-d.log |
+
+*** O borramos dado un patrón.
+#+begin_src shell
+  echo `wc -l kernel.log`
+  sed  '/evdi/d' < kernel.log > result.log
+  echo `wc -l result.log`
+#+end_src
+
+#+RESULTS:
+| 6022 | kernel.log |
+| 5274 | result.log |
+
+*** Borrado de palabras
+#+begin_src shell
+  sed  's/evdi//g' < kernel.log > result.log
+#+end_src
+* grep / regex
+** ¿Qué es una expresión regular?
+Son una serie de caracteres que especifican patrones. Se usan para hacer búsquedas en textos para extraer diferentes características de los mismos.
+OJO: veremos las bases del lenguaje, ya que hay demasiado material para todo lo que se puede hacer con Regex
+
+| Utility | Regular Expression Type   |
+| -       | -                         |
+| vi      | Basic                     |
+| grep    | Basic                     |
+| awk     | Extended                  |
+| Emacs   | EMACS Regular Expressions |
+| PERL    | PERL Regular Expressions  |
+
+** Caracteres Ancla
+Los caracteres ancla, son caracteres que nos indican por ejemplo el inicio o fin de una línea:
++ =$= es el caracter para el fin de línea.
++ =^= es el caracter para el inicio de línea.
+#+begin_src shell
+  wc -l kernel.log
+  grep "Sep 15" kernel.log |head -5
+  grep "^Sep 15 14:55" kernel.log | wc -l
+  grep "^Sep 15 14:56" kernel.log | wc -l
+  grep "(Xorg)$" kernel.log | wc -l
+#+end_src
+
+** "."
+El "." hace match con cualquier caracter.
+Nos filtra todos los renglones que tienen sólo un caracter.
+#+begin_src shell
+grep "^.*$" kernel.log | wc -l
+#+end_src
+
+#+RESULTS:
+: 6022
+
+** Rangos de caracteres.
+Puedes hacer filtros con diferentes patrones al encerrarlos en =[]=.
+¿Qué hace este filtro?
+
+#+begin_src shell
+grep "^[0-9]$" kernel.log | wc -l
+#+end_src
+
+Búsqueda de dos números seguidos y sólo esos dos en la línea
+#+begin_src shell
+grep "^[0-9]*$" kernel.log | wc -l
+#+end_src
+
+
+Podemos usar el guión para establecer rangos
+#+begin_src shell
+ grep "^[3-9]$" kernel.log | wc -l
+#+end_src
+
+
+Funciona también con letras:
+#+begin_src shell
+grep "^[abcdeT]$" kernel.log | wc -l
+#+end_src
+
+Y rangos de letras también:
+#+begin_src shell
+grep "^[a-z]$" kernel.log | wc -l
+#+end_src
+
+Ojo que hay diferencias con las letras mayúsculas:
+
+#+begin_src shell
+  grep "^[A-Z ]$" kernel.log | wc -l
+  grep "^[A-Za-z]$" kernel.log | wc -l
+  grep "^[A-Za-z0-9]$" kernel.log | wc -l
+  grep "^[A-Za-z0-9_\.]*$" kernel.log | wc -l
+#+end_src
+
+** Excepciones
+Líneas con un sólo caracter excepto este set:
+#+begin_src shell
+  grep "^[^A-Z]$" kernel.log | wc -l
+  grep "^[^A-Z_]$" kernel.log | wc -l
+  grep "^[^A-Z0-9xs]$" kernel.log | wc -l
+#+end_src
+
+** Repetición:
+podemos pedir que un cierto caracter (o grupo de caracteres se repita cero o más veces).
+#+begin_src shell
+  grep "^[A-Za-z]*$" kernel.log | wc -l
+#+end_src
+
+es importante que en este caso el =*= no es lo mismo que en los wildcards de cuando listamos archivos
+#+begin_src shell
+  ls re*.log
+#+end_src
+
+** Número de ocurrencias.
+delimitar el número de ocurrencias.
+#+begin_src shell
+  grep "^[A-Z0-9]\{2,\}$" kernel.log | wc -l
+  grep "^[A-Z].*" kernel.log | wc -l
+#+end_src
+
+** Matcheo de palabras.
+
+#+begin_src shell
+  grep "\<[Ff]amily\>" kernel.log
+  grep "Thu\{,1\}" kernel.log | wc -l
+  grep "\<[TW][ehu][deu]\>" kernel.log |wc -l
+
+#+end_src
+
+* CRON
+[[https://skalas.me/first-cron][Checar este link, #shamelesSelf-promotion.]]
+
+* Awk
+** Intro
+Awk es un programa que es excelente para el manejo de información. Como =sed=  y =grep= es una función que ayuda a filtrar. Está en la mayoría de los sistemas UNIX-like.
+
+Como los programas que hemos visitado, =awk= toma información del /stream/ de datos o algún archivo, para ejecutar sus funciones, por ende, tambien se puede hacer parte de un pipeline.
+
+En principio se pensó para programas de una línea (lol), pero es un lenguaje Turing-completo y se pueden hacer scripts bastante complejos.
+
+AWK se creó en los laboratorios Bell y su nombre viene de los nombres de sus creadores:
+- Alfred Aho
+- Peter Weinberger
+- Brian Kernighan
+
+** Estructura
+la estructura base del programa en awk es :
+ - patrón {acción}
+
+#+begin_src shell
+  awk 'BEGIN { print "START" }
+             { print   ""    }
+       END   { print "STOP"  }'
+#+end_src
+
+** Basico
+*** Comando Print
+
+#+begin_src shell
+ps | awk '{print}'
+#+end_src
+
+*** Print Cols
+#+begin_src shell
+  ps | awk '{print $2}'
+#+end_src
+
+*** Delimitadores
+
+#+begin_src shell
+ awk -F ":" '{print $5}' /etc/passwd
+#+end_src
+
+*** Print enhanced.
+
+**** Diferentes columnas
+#+begin_src shell
+ps -a | awk '{print $1, $2, $3}'
+#+end_src
+
+**** Delimitador de salida
+#+begin_src shell
+ps -a | awk '{print $1" "$2" "$3}'
+#+end_src
+
+
+**** Delimitador de salida a priori
+#+begin_src shell
+awk 'BEGIN{FS=":"; OFS=";"} {print $2, $6, $7}' /etc/passwd
+#+end_src
+
+*** Busqueda
+#+begin_src shell
+  cat /etc/shells | awk -F "/" '/^\// {print $NF}'
+#+end_src
+
+
+**** Ejemplo Anterior:
+#+begin_src shell
+  cat /etc/passwd | awk -F':' '/^[a-z_]/ {print $1"-"$3}'
+#+end_src
+
+***  Operaciones básicas
+#+begin_src shell
+df -h | awk '/\/dev/ {print $1"\t"$2"\t"$3}'
+#+end_src
+
+#+begin_src shell
+df -h | awk '/\/dev/ {print $1"\t"$2+$3}'
+#+end_src
+
+#+begin_src shell
+df | awk '/\/dev/ {print $1"-"$2-$3}'
+#+end_src
+
+*** line length
+#+begin_src shell
+  cat /etc/shells | awk 'length($0) <10'
+#+end_src
+
+*** Ifs!!!
+#+begin_src shell
+  ps -ef | awk '{if ($NF == "/bin/zsh") print $0} '
+#+end_src
+
+*** For.
+#+begin_src shell
+awk 'BEGIN { for (i=1; i<=10; i++) print "El cuadrado de ", i, "es",i*i;}'
+#+end_src
+
+#+RESULTS:
+| El | cuadrado | de |  1 | es |   1 |
+| El | cuadrado | de |  2 | es |   4 |
+| El | cuadrado | de |  3 | es |   9 |
+| El | cuadrado | de |  4 | es |  16 |
+| El | cuadrado | de |  5 | es |  25 |
+| El | cuadrado | de |  6 | es |  36 |
+| El | cuadrado | de |  7 | es |  49 |
+| El | cuadrado | de |  8 | es |  64 |
+| El | cuadrado | de |  9 | es |  81 |
+| El | cuadrado | de | 10 | es | 100 |
+
+*** Rangos
+#+begin_src shell
+  df | awk 'NR==3, NR==5 {print NR, $0}'
+#+end_src
+
+*** numero de líneas
+#+begin_src shell
+  awk 'END {print NR}' /etc/passwd
+  wc -l /etc/passwd
+#+end_src
+
+*** Cuenta las palabras
+#+begin_src shell
+  awk 'BEGIN {
+      FS="[^a-zA-Z]+"
+  }
+  {
+      for (i=1; i<=NF; i++)
+          words[tolower($i)]++
+  }
+  END {
+      for (i in words)
+          print i, words[i]
+  }' test.log
+#+end_src
+
+** Scripts
+*** Shell
+#+begin_src shell
+#!/bin/sh
+awk '
+BEGIN { for (i=1; i<=10; i++) print "El cuadrado de ", i, "es",i*i;}
+'
+#+end_src
+
+*** awk
+
+#+begin_src shell :tangle ./cuadrado.awk
+#!/usr/bin/awk
+BEGIN { for (i=1; i<=10; i++) print "El cuadrado de ", i, "es",i*i;}
+#+end_src
+
+#+begin_src shell
+ awk -f cuadrado.awk
+#+end_src
+
+*** Otro ejemplo
+
+#+begin_src shell :tangle ./fileowner.awk
+#!/usr/bin/awk
+BEGIN { print "File\tOwner" }
+{ print $9, "\t", $3}
+END { }
+#+end_src
+
+#+RESULTS:
+
+#+begin_src shell
+   ls -la | awk -f fileowner.awk
+#+end_src
