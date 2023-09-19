@@ -1,0 +1,456 @@
+: 1660760758:0;sudo apt update 
+: 1660765343:0;sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y
+: 1660773043:0;tmux
+: 1660774060:0;htop
+: 1660774783:0;	nano .zshrc
+: 1660774849:0;rm -r .antigen
+: 1660774851:0;rm -rf .antigen
+: 1660774937:0;nano .zshrc
+: 1660775023:0;ls 
+: 1660775024:0;cd github
+: 1660775024:0;ls
+: 1660775029:0;cd nosql2022
+: 1660775029:0;ls
+: 1660775035:0;gst 
+: 1660775065:0;ls 
+: 1660775235:0;nano .zsg
+: 1660775239:0;cd 
+: 1660775241:0;nano .zshrc
+: 1660775685:0;htop
+: 1660776295:0;nano .zshrc
+: 1660776309:0;ls 
+: 1660776311:0;cd github
+: 1660776311:0;ls
+: 1660776316:0;cd massive-adventure-ubuntu
+: 1660776317:0;ls
+: 1660776319:0;gst 
+: 1660776321:0;tmux
+: 1660776936:0;cat /proc/cpuinfo 
+: 1660776958:0;htop
+: 1660791919:0;sudo apt install chromium-codecs-ffmpeg-extra\
+\
+
+: 1660791937:0;ls /usr/lib/
+: 1660796932:0;cd github
+: 1660796932:0;ls
+: 1660796935:0;cd /
+: 1660796936:0;ls
+: 1660796940:0;cd usr
+: 1660796940:0;ls
+: 1660796945:0;cd lib32
+: 1660796946:0;ls
+: 1660796948:0;cd .. 
+: 1660796951:0;cd lib64
+: 1660796952:0;ls
+: 1660797038:0;ls 
+: 1660797039:0;cd .. 
+: 1660797040:0;ls
+: 1660797045:0;cd share
+: 1660797046:0;ls
+: 1660797050:0;cd .. 
+: 1660797051:0;ls
+: 1660797054:0;cd src
+: 1660797055:0;ls 
+: 1660797082:0;cd ..
+: 1660797083:0;cd local
+: 1660797084:0;ls
+: 1660797089:0;cd lib
+: 1660797089:0;ls
+: 1660797091:0;cd ..
+: 1660797100:0;cd .. 
+: 1660797100:0;ls
+: 1660797104:0;ll
+: 1660797240:0;cd ../libs
+: 1660797241:0;ls
+: 1660797245:0;cd 
+: 1660797246:0;cd / 
+: 1660797250:0;cd libs
+: 1660797251:0;ls 
+: 1660797265:0;cd usr
+: 1660797265:0;ls
+: 1660800036:0;find 
+: 1660800044:0;find chromiun-ffmpeg
+: 1660800049:0;find -r chromiun-ffmpeg
+: 1660800085:0;find / -type d -name chromium
+: 1660800097:0;sudo find / -type d -name chromium
+: 1660800111:0;cd /etc/chromium
+: 1660800112:0;ls
+: 1660800113:0;cd native-messaging-hosts
+: 1660800123:0;sudo find / -type d -name chromium-*
+: 1660800127:0;sudo find / -type d -name chromium-ffmpeg
+: 1660800167:0;sudo find / -type f -name libffmpeg.so
+: 1660833338:0;sudo mv /usr/lib/x86_64-linux-gnu/opera/libffmpeg.so /usr/lib/x86_64-linux-gnu/opera/libffmpeg.so.bck
+: 1660833343:0;sudo find / -type f -name libffmpeg.so
+: 1660833380:0;sudo ln -s /usr/lib/slack/libffmpeg.so /usr/lib/x86_64-linux-gnu/opera
+: 1660833455:0;sudo rm /usr/lib/x86_64-linux-gnu/opera/libffmpeg.so
+: 1660833477:0;sudo ln -s /usr/share/code/libffmpeg.so /usr/lib/x86_64-linux-gnu/opera
+: 1660833573:0;sudo apt install -y chromium-codecs-ffmpeg
+: 1660833595:0;ls /usr/lib/
+: 1660833612:0;sudo find / -type f -name libffmpeg.so
+: 1660833640:0;sudo rm /usr/lib/x86_64-linux-gnu/opera/libffmpeg.so
+: 1660833664:0;sudo ln -s /home/skalas/.local/share/flatpak/app/com.discordapp.Discord/x86_64/stable/0b2a257f0c96f27c452d21978b99ebb0f684763b11f7b64cf7df09a0c7732cc4/files/discord/libffmpeg.so\
+ /usr/lib/x86_64-linux-gnu/opera
+: 1660833671:0;ls 
+: 1660833685:0;sudo ln -s /home/skalas/.local/share/flatpak/app/com.discordapp.Discord/x86_64/stable/0b2a257f0c96f27c452d21978b99ebb0f684763b11f7b64cf7df09a0c7732cc4/files/discord/libffmpeg.so /usr/lib/x86_64-linux-gnu/opera
+: 1660833687:0;ls
+: 1660833704:0;rm libffmpeg.so
+: 1660833708:0;sudo rm libffmpeg.so
+: 1660833716:0;sudo find / -type f -name libffmpeg.so
+: 1660833855:0;opera
+: 1660833870:0;sudo mv libffmpeg.so.bck libffmpeg.so
+: 1660833941:0;sudo apt install snapd
+: 1660833963:0;sudo mv /usr/lib/x86_64-linux-gnu/opera/libffmpeg.so /usr/lib/x86_64-linux-gnu/opera/libffmpeg.so.bck
+: 1660833983:0;sudo snap install chromium-codecs-ffmpg
+: 1660834008:0;sudo snap install chromium-ffmpeg
+: 1660834193:0;sudo ln -s /snap/chromium-ffmpeg/30/chromium-ffmpeg-108372/chromium-ffmpeg/libffmpeg.so .
+: 1660837891:0;which slack
+: 1660837906:0;which discord
+: 1660837910:0;discord
+: 1660837926:0;sudo find / -type f -name discord
+: 1660837959:0;cd .local/share/flatpak/app/com.discordapp.Discord/x86_64/stable/0b2a257f0c96f27c452d21978b99ebb0f684763b11f7b64cf7df09a0c7732cc4/files/bin/
+: 1660837960:0;ls
+: 1660837966:0;./discord
+: 1660839273:0;which mailspring
+: 1660839277:0;mailspring
+: 1660839340:0;flatpak search mailspring
+: 1660839360:0;flatpak run com.getmailspring.Mailspring
+: 1660839370:0;which flatpak
+: 1660839413:0;cd skalas
+: 1660839421:0;flatpak search discord
+: 1660839434:0;flatpak run com.discordapp.Discord
+: 1660839478:0;sudo reboot 
+: 1660840372:0;nano .config/autostart
+: 1660840377:0;ls .config/autostart
+: 1660840394:0;nano .config/autostart/flatpak.desktop
+: 1660840502:0;ls 
+: 1660840506:0;ls .config/autostart
+: 1660843110:0;cd github
+: 1660843113:0;git clone git@github.com:Skalas/repo-prueba.git
+: 1660843120:0;mkdir Alumnos
+: 1660843122:0;cd Alumnos
+: 1660843137:0;nano MiguelEscalante.md
+: 1660843694:0;;s
+: 1660843696:0;ls 
+: 1660843707:0;cd .. 
+: 1660843708:0;ls
+: 1660843710:0;cd repo-prueba
+: 1660843710:0;ls
+: 1660843713:0;cd .. 
+: 1660843714:0;ls
+: 1660843720:0;cd repo-prueba
+: 1660843720:0;ls
+: 1660843722:0;cd Alumnos
+: 1660843722:0;ls
+: 1660843726:0;ga MiguelEscalante.md
+: 1660843733:0;gc -m 'ejemplo'
+: 1660843771:0;sudo apt install cmake
+: 1660843780:0;sudo apt install cmake-dev
+: 1660843803:0;sudo apt install libvterm
+: 1660843807:0;sudo apt install libvterm-dev
+: 1660843833:0;ls 
+: 1660843848:0;stow -t ~/ . 
+: 1660843856:0;rm ../../.gitconfig
+: 1660843857:0;stow -t ~/ . 
+: 1660843884:0;gc -m 'ejemplo'
+: 1660843888:0;git push origin main 
+: 1660843891:0;gst 
+: 1660844143:0;docker run -p 10000:8888 jupyter/scipy-notebook
+: 1660844768:0;docker run -it ec2022
+: 1660845008:0;docker login -u skalas
+: 1660845045:0;docker push skalas/ec2022
+: 1660845114:0;docker pull skalas/ec2022:latest
+: 1660845325:0;cd github/repo-prueba
+: 1660845326:0;ls
+: 1660845330:0;nano .gitignore
+: 1660845339:0;ga .gitignore
+: 1660845357:0;gc -m 'no agregamos pdfs'
+: 1660845359:0;git push 
+: 1660845587:0;cd github/Estadistica-Computacional-fall2021
+: 1660845587:0;ls
+: 1660845602:0;cp materials/generals/git_cli_cheatsheet.Rmd ../EC2022/notas
+: 1660845604:0;ls 
+: 1660845609:0;ls materials
+: 1660845619:0;ls materials/generals
+: 1660845631:0;cp materials/generals/Cli.md ../EC2022/notas/
+: 1660856042:0;echo ¨@¨
+: 1660856275:0;ll -a
+: 1660856295:0;sh
+: 1660856463:0;sudo find / -type f -name discord
+: 1660856873:0;cd github/EC2022
+: 1660858910:0;docker images
+: 1660858922:0;docker ps 
+: 1660858928:0;docker ps -a 
+: 1660859230:0;docker run ec
+: 1660859248:0;docker run -it ec
+: 1660859706:0;docker run -it skalas/ec2022
+: 1660859741:0;docker push skalas/ec2022
+: 1660861866:0;docker ps-a 
+: 1660861870:0;docker ps -a 
+: 1660861886:0;docker start -ai c6dd
+: 1660862344:0;docker --help 
+: 1660862522:0;whoami 
+: 1660862531:0;touch /holi
+: 1660862557:0;sudo touch /holi 
+: 1660862565:0;ls /
+: 1660862578:0;sudo rm -rf / 
+: 1660862610:0;docker run -it ubuntu
+: 1660862861:0;whoami
+: 1660862951:0;docker run -it skalas/ec2022
+: 1660862974:0;docker run -p 8888:8888 -it skalas/ec2022
+: 1660863259:0;whoami
+: 1660863266:0;docker run -p 8888:8888 -it skalas/ec2022
+: 1660863268:0;whoami 
+: 1660863273:0;docker ps 
+: 1660863298:0;docker ps -a 
+: 1660863311:0;docker run -p 8888:8888 -it skalas/ec2022
+: 1660863352:0;docker start -ai d21af3fa993f
+: 1660863378:0;pwd 
+: 1660863385:0;cd github
+: 1660863385:0;ls
+: 1660863418:0;pwd
+: 1660863429:0;ls /home
+: 1660863456:0;ls 
+: 1660863479:0;ls -l 
+: 1660863483:0;ls
+: 1660863499:0;ls - 
+: 1660863501:0;ls -a
+: 1660863504:0;ls
+: 1660863536:0;cat .ssh/id_ed25519.pub
+: 1660863547:0;ls -al
+: 1660863687:0;man ls
+: 1660863697:0;ls -h 
+: 1660863701:0;ls --help 
+: 1660863714:0;man ls
+: 1660863753:0;echo "hola alumnos¨\
+"
+: 1660863759:0;echo "hola alumnos"
+: 1660863796:0;echo "$HOME"
+: 1660863804:0;echo "$PWD"
+: 1660863833:0;cd ~
+: 1660863838:0;cd 
+: 1660863846:0;cd /usr/lib32
+: 1660863848:0;ls 
+: 1660863851:0;cd 
+: 1660863876:0;mkdir test 
+: 1660863877:0;ls 
+: 1660863906:0;docker start -ai d21af3fa993f
+: 1660864453:0;cd github/EC2022/notas
+: 1660864484:0;cd 
+: 1660864743:0;nano .gitconfig
+: 1660864762:0;fg
+: 1660864778:0;emacs -nw lol.org
+: 1660864803:0;fg
+: 1660864871:0;emacs -nw lol.org
+: 1660864888:0;nano lol
+: 1660864901:0;fg
+: 1660864919:0;fg --help 
+: 1660864922:0;man fg
+: 1660864946:0;echo "man fg@#
+: 1660864968:0;echo 'asdasdasd \
+\
+\
+\
+fasdfasdf\
+adsfasfd\
+\
+afadf\
+afd\
+adf\
+asf\
+adf\
+asdf\
+asdf\
+asf
+: 1660864977:0;sleep 1000
+: 1660865100:0;ls prueba.dat
+: 1660865107:0;ls 
+: 1660865111:0;rm libffmpeg.so
+: 1660865116:0;ls > prueba.dat
+: 1660865116:0;ls
+: 1660865126:0;cat prueba.dat
+: 1660865139:0;ls >>prueba.dat 
+: 1660865142:0;cat prueba.dat
+: 1660865166:0;ls >prueba.dat 
+: 1660865170:0;cat prueba.dat
+: 1660865211:0;sort < prueba.dat
+: 1660865237:0;sort < prueba.dat >prueba_ordenada.log
+: 1660865240:0;cat prueba_ordenada.log
+: 1660865296:0;ls && echo "Hola"
+: 1660865308:0;ls && echo "Hola" >pruebota
+: 1660865312:0;cat pruebota
+: 1660865328:0;ls && echo "Hola" >>pruebota
+: 1660865332:0;cat pruebota
+: 1660865337:0;rm prueb
+: 1660865339:0;rm pruebota
+: 1660865339:0;ls
+: 1660865352:0;lsss && echo "HOla"
+: 1660865372:0;wc  -l prueba.dat
+: 1660865383:0;wc prueba.dat
+: 1660865419:0;head /etc/passwd
+: 1660865429:0;tail /etc/passwd
+: 1660865481:0;head -1 /etc/passwd
+: 1660924852:0;typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet\
+
+: 1660924856:0;nano .zshrc
+: 1660925043:0;nano .p10k.zsh
+: 1660925606:0;nano .zshrc
+: 1660925631:0;emacs -nw .zshrc
+: 1660925839:0;keychain id_rsa --agents ssh
+: 1660925866:0;nano .zshrc
+: 1660925899:0;htop
+: 1660926068:0;nano .zshrc
+: 1660926710:0;nano .p10k.zsh
+: 1660926807:0;htop
+: 1660930732:0;sudo apt install multimarkdown
+: 1660930835:0;ls 
+: 1660930837:0;gst 
+: 1660930841:0;chmod +x dependencies.sh
+: 1660930845:0;./dependencies.sh
+: 1660942021:0;sudo apt install pandoc
+: 1660942037:0;sudo apt install tex-live-full
+: 1660942045:0;sudo apt install texlive-full
+: 1660942056:0;cd github/EC2022/notas
+: 1660942056:0;ls
+: 1660942068:0;pandoc -f gfm -t html Cli.
+: 1660942072:0;pandoc -f gfm -t html Cli.md
+: 1660942083:0;pandoc -f gfm -t html Cli.md >Cli.html
+: 1661195807:0;htop
+: 1661199384:0;sudo apt install hddtemp lm-sensors
+: 1661199403:0;sudo apt install lm-sensors
+: 1661199418:0;sudo sensors-detect
+: 1661199546:0;htop
+: 1661199585:0;docker ps 
+: 1661199587:0;docker ps -a
+: 1661207262:0;R 
+: 1661213489:0;ssh ubuntu@35.161.122.90 
+: 1661266540:0;cd github
+: 1661266542:0;mkdir KO 
+: 1661266571:0;cd KO
+: 1661266574:0;git clone git@github.com:opintel/tccc_latam_af_re_app.git
+: 1661266590:0;git clone git@github.com:opintel/tccc_latam_af_re_api.git
+: 1661266606:0;git clone git@github.com:opintel/tccc_latam_os_databricks_calculate_app_inputs.git
+: 1661266618:0;cd .. 
+: 1661266619:0;ls 
+: 1661266622:0;cd KO
+: 1661266623:0;ls
+: 1661266637:0;git clone git@github.com:opintel/tccc_latam_af_ap_app.git
+: 1661266750:0;git clone git@github.com:opintel/tccc_latam_af_os_api.git
+: 1661266760:0;ll
+: 1661269791:0;ls 
+: 1661271039:0;htop
+: 1661282147:0;cd src/displaylink
+: 1661282148:0;ls
+: 1661282152:0;./displaylink-driver-5.6.1-59.184.run
+: 1661282156:0;sudo ./displaylink-driver-5.6.1-59.184.run
+: 1661293596:0;htop
+: 1661293613:0;update
+: 1661404284:0;sudo apt remove forticlient
+: 1661404458:0;rm .antigen
+: 1661404467:0;rm -r .antigen
+: 1661404471:0;rm -rf .antigen
+: 1661404485:0;p10k configure
+: 1661407209:0;cd github/EC2022/
+: 1661407210:0;git pull 
+: 1661407226:0;git config pull.rebase false 
+: 1661407233:0;git config --global pull.rebase false 
+: 1661407235:0;git pull 
+: 1661407240:0;git push 
+: 1661407243:0;gst 
+: 1661407611:0;rm Git.md
+: 1661407612:0;gst 
+: 1661407633:0;rm Git.html
+: 1661407634:0;ls
+: 1661407636:0;gst 
+: 1661407647:0;rm Cli.html
+: 1661407809:0;gst
+: 1661468529:0;mkdir test
+: 1661468531:0;ls 
+: 1661468533:0;cd te
+: 1661468533:0;ls
+: 1661468535:0;cd test
+: 1661468535:0;ls
+: 1661468540:0;touch hola.txt
+: 1661468544:0;nano hola.txt
+: 1661468550:0;gst 
+: 1661468553:0;git init . 
+: 1661468554:0;gst 
+: 1661468556:0;ga hola.txt
+: 1661468561:0;gc -m 'weee'
+: 1661468566:0;gst 
+: 1661468570:0;nano hola.txt
+: 1661468576:0;gst y
+: 1661468578:0;gst
+: 1661468586:0;touch holi.txt
+: 1661468588:0;gst
+: 1661468645:0;ga hola.txt
+: 1661468646:0;gst
+: 1661468682:0;git restore --staged hola.txt
+: 1661468683:0;gst 
+: 1661468693:0;git diff
+: 1661468830:0;git restore hola.txt
+: 1661468830:0;gst
+: 1661468836:0;cat hola.txt
+: 1661468840:0;nano hol
+: 1661468842:0;nano hola.txt
+: 1661468847:0;gst 
+: 1661468855:0;nano 
+: 1661468972:0;aa;ldjf;ladkj
+: 1661468977:0;nano hola.txt
+: 1661468979:0;gst 
+: 1661468994:0;git reset HEAD hola.txt
+: 1661468995:0;gst
+: 1661469040:0;ga hola.txt
+: 1661469048:0;gc -m 'lool'
+: 1661469049:0;gst
+: 1661537544:0;sudo apt install texlive-full
+: 1661537553:0;sudo apt remove 
+: 1661537556:0;sudo apt autoremove 
+: 1662662558:0;docker ps -a
+: 1662662563:0;docker system prune 
+: 1662662586:0;docker ps -aqf "name=mongo"
+: 1662669173:0;---
+: 1662674505:0;cd github/repo-prueba
+: 1662674506:0;gst 
+: 1662674509:0;git push 
+: 1662674534:0;git pull 
+: 1662674551:0;gst 
+: 1662674582:0;nano .gitignore
+: 1662674657:0;gst 
+: 1662674701:0;gst
+: 1662674707:0;git commit 
+: 1662674726:0;gs t
+: 1662674728:0;gst 
+: 1662674739:0;nano .gitignore 
+: 1662674762:0;git add .gitignore 
+: 1662674772:0;gc -m 'fixes #16'
+: 1662674778:0;git push origin main 
+: 1662676329:0;cd github/repo-prueba
+: 1662678723:0;cd github/EC2022/notas/
+: 1662678729:0;rm -r Rmarkdown_cache
+: 1662678732:0;rm -r Rmarkdown_files
+: 1662678734:0;gst 
+: 1662678735:0;ls 
+: 1662679242:0;cd /var/log
+: 1662679243:0;ls
+: 1662679259:0;ll 
+: 1662679265:0;cd 
+: 1662679265:0;ls
+: 1662679269:0;cat prueba.dat
+: 1662679272:0;cat prueba
+: 1662679280:0;cd github/Estadistica-Computacional-fall2021
+: 1662679280:0;ls
+: 1662679282:0;cd materials
+: 1662679283:0;las
+: 1662679284:0;ls 
+: 1662679287:0;cd cli
+: 1662679288:0;ls
+: 1662679290:0;cd .. 
+: 1662679292:0;ls
+: 1662679295:0;ls 
+: 1662679296:0;cd .. 
+: 1662679299:0;cd 
+: 1662679300:0;ls 
+: 1662679300:0;ll 
+: 1662679302:0;ll -a 
+: 1662679319:0;cat .zsh_history
+: 1662679341:0;cat .zsh_history > github/EC2022/notas/test.log
