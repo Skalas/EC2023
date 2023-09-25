@@ -314,7 +314,7 @@ Si no se configuran las credenciales, cada vez que quieras hacer `clone`,
 El repositorio está en:
 
 ```
-https://github.com/skalas/EC2022
+https://github.com/skalas/EC2023
 ```
 
 ## Ejercicio: Forks
