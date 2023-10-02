@@ -182,7 +182,7 @@ Y ahora intenta lo siguiente:
 
 
 #+begin_src sh
-  > wc -l /etc/passwd
+wc -l /etc/passwd
   24 /etc/passwd
 #+end_src
 
@@ -198,19 +198,15 @@ Y ahora intenta lo siguiente:
 - ~cat~ concatena archivos y/o imprime al ~stdout~
 
 #+begin_src bash
-  > echo 'Hola mundo' >> test
-  > echo 'Adios mundo cruel' >> test
-  > cat test
-  ...
-  > cp test test2
-  > cat test test2 > test3
-  > wc -l test*
+  echo 'Hola mundo' >> test
+  echo 'Adios mundo cruel' >> test
+  cat test
+  cp test test2
+  cat test test2 > test3
+  wc -l test*
 #+end_src
 
 Existen otros comando poderosos como ~split~, ~uniq~, ~grep~, etc.
-
-
-----
 
 Con estos ejercicios deberías de ser capaz de manejar los básicos del
 ~file system~ y de la línea de comandos

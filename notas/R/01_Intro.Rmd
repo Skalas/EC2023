@@ -1,0 +1,67 @@
+---
+title: "Introducción a R"
+output:
+  html_document:
+    toc: yes
+    toc_depth: 2
+    toc_float: true
+    theme: spacelab
+  github_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+
+# R 
+	
+## ¿Qué es R? 
+
+`R` es un lenguaje de programación originado en 1993, es un proyecto GNU 
+que es un dialecto de su antecesor `S`, un proyecto de investigación en los 
+laboratorios Bell por ahí de los 80's. Hoy en día `R` es de los lenguajes de 
+programación más importantes en el área de ciencia de datos.
+
+`R` es un lenguaje de programación enfocado en el análisis estadístico y gráfico;
+se puede usar en diferentes plataformas y sistemas operativos. Es mantenido por un 
+equipo de personas, y está soportado por una comunidad impresionante. 
+
+
+*TL;DR*: `R` es un lenguaje libre que nos ayuda a leer, transformar, graficar, 
+modelar y entender datos.
+
+## ¿Por qué R?
+
+- Está enfocado al manejo modelado y graficación de información.
+- Es  libre y gratuito.
+- La comunidad que lo soporta es lo que le da tanto valor.
+- Miles de paquetes, con los últimos desarrollos en estadística.
+- Manejo de series de tiempo, bases de datos, datos geoespaciales.
+- Conecta muy bien con todo tipo de sistemas.
+
+Una de las características centrales del lenguaje, que en mi opinión son 
+fundamentales para cuando vamos empezando a programar, es el papel tan central 
+que tiene un el `data.frame` en el lenguaje. 
+
+Python por ejemplo es un lenguaje de programación enorme y muy complejo, 
+bastante útill; sin embargo es muy fácilperderse en todo lo que python 
+tiene para ofrecer. 
+
+Por otro lado `R` tiene un ambiente que se asemeja más a una hoja de cálculo, 
+el data frame nos ayuda a pensar en tablas y no sólo en clases o toda la complejidad
+inherente a un lenguaje de programación. 
+
+
+# ¿Por qué aprender a programar? 
+
+Una analogía a por qué aprender a programar `R` contra todos los demás softwares 
+de cómputo, es la siguiente: Usar SPSS (o software similar), es como ir en un 
+autobús, mientras que aprender a programar en `R` es como manejar tu mismo un auto. 
+
+La diferencia es evidente y la flexibilidad que te da el poder usar todas las 
+herramientas, es fantástica. Espero que este módulo les ayude a construír una 
+caja de herramientas más sólida para cuando lo necesiten. 
+
+Bienvenidos. :)
+
