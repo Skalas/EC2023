@@ -1,0 +1,233 @@
+---
+title: "Conexiones en R "
+date: "`r format(Sys.time(), '%Y-%m-%d')`"
+output:
+  html_document:
+    toc: yes
+    toc_depth: 2
+    toc_float: true
+    theme: spacelab
+
+---
+
+
+```{r, include = F}
+knitr::opts_chunk$set(echo = T, error = F, message = F, warning = F)
+library(dplyr)
+library(readr)
+```
+
+# Leer un csv
+```{bash, echo=F}
+mkdir -p data
+```
+
+Primero para preparar todas las pruebas hago lo inverso... Escribo todo! :)
+```{r}
+
+nycflights13::flights %>%
+    write_csv('data/test.csv')
+nycflights13::flights %>%
+    write_tsv('data/test.tsv')
+nycflights13::flights %>%
+    write_delim('data/test.psv', delim='|')
+```
+
+La manera más sencilla de entender los diferentes formatos es simplemente observándolos.
+
+## CSV (coma separated values)
+```{bash}
+head data/test.csv
+```
+
+### Lectura
+
+Para leer un `csv` simplemente usamos el comando:
+```{r}
+data <- read_csv('data/test.csv')
+data %>%
+    head()
+```
+
+## TSV (Tab separated values)
+
+Así se ve la base de datos en texto plano.
+
+```{bash}
+head data/test.tsv
+```
+
+### Lectura
+
+Para leer un `tsv` simplemente usamos el comando:
+
+```{r}
+data <- read_tsv('data/test.tsv')
+data %>%
+    head()
+```
+## Con delimitador determinado.
+Así se ve la base de datos en texto plano.
+
+```{bash}
+head data/test.psv
+```
+
+### Lectura
+
+Para leer un `psv` simplemente usamos el comando:
+```{r}
+data <- read_delim('data/test.psv', delim='|')
+data %>%
+    head()
+```
+# Leer de un SQL.
+## Conexión
+Usaeremos los siguientes paquetes para conectar con SQL, en este caso estoy usando PostgreSQL,
+sin embargo hay conexión para la mayoría de las bases de datos los más comunes:
+
+  * RMySQL conecta con MySQL y MariaDB.
+  * RPostgreSQL connecta con Postgres y Redshift.
+  * RSQLite genera una base de datos SQLite
+  * odbc se conecta a muchas bases de datos comerciales a través del protocolo abierto de conectividad de bases de datos.
+  * bigrquery conecta a Google BigQuery.
+
+```{r}
+library(dbplyr)
+con <- DBI::dbConnect(RPostgreSQL::PostgreSQL(),
+  host = "0.0.0.0",
+  user = "postgres",
+  password = 'postgres'
+  )
+```
+
+Con este comando estoy subiendo una copia de la base de datos flights a PostgreSQL, para poder usarla como ejemplo:
+
+```{r}
+copy_to(
+    con, nycflights13::flights, "flights",
+    overwrite=TRUE, temporary = FALSE,
+    indexes = list(
+        c("year", "month", "day"),
+        "carrier",
+        "tailnum",
+        "dest"
+    )
+)
+```
+
+Así se accede a la base de datos y se puede trabajar como los `tibbles` que ya conoces con un par de modificaciones.
+
+## Ejemplos
+
+```{r}
+flights_db <- tbl(con, "flights")
+```
+```{r}
+flights_db %>% select(year:day, dep_delay, arr_delay)
+```
+```{r}
+flights_db %>% filter(dep_delay > 240)
+```
+```{r}
+flights_db %>%
+  group_by(dest) %>%
+  summarise(delay = mean(dep_time))
+```
+
+## Lazy Eval
+
+La evaluación es "Floja". Lo cual quiere decir que hará la menor cantidad de operaciones necesarias para mostrar el resultado, no nos dice cuantos resultados de hecho tenemos ni cuántos renglones faltan por mostrar
+
+```{r}
+data <- flights_db %>%
+  group_by(tailnum) %>%
+  summarise(
+    delay = mean(arr_delay),
+    n = n()
+  ) %>%
+  arrange(desc(delay)) %>%
+  filter(n > 100)
+```
+
+## Query SQL
+
+Podemos ver el query SQL que se va a ejecutar con el commando `show_query()`:
+```{r}
+data %>%
+    show_query()
+```
+## Obtener datos
+
+Para obtener los resultados requeridos podemos usar la función `collect()`
+
+```{r}
+data %>%
+    collect()
+```
+
+# Leer un xlsx
+
+Para leer un xlsx usamos la función `read_xl`.
+
+```{r}
+library(readxl)
+xls_example <- readxl_example("datasets.xls")
+print(xls_example)
+read_excel(xls_example)
+```
+
+## Extensiones
+
+Ojo que si usamos la extensión xlsx, lo reconoce automáticamente.
+```{r}
+xlsx_example <- readxl_example("datasets.xlsx")
+print(xlsx_example)
+read_excel(xlsx_example)
+```
+
+## Hojas del archivo
+
+Podemos leer las hojas del archivo, por default lee la primer hoja.
+```{r}
+excel_sheets(xlsx_example)
+```
+Podemos referenciar por nombre de hoja, o por número de hoja.
+
+```{r}
+read_excel(xlsx_example, sheet = 'mtcars')
+```
+
+```{r}
+read_excel(xlsx_example, sheet = 4)
+```
+
+## Rango del archivo
+Podemos especificar un rango al estilo excel, para elegir de dónde a dónde leerá el archivo de excel:
+
+```{r}
+read_excel(xlsx_example, range = "mtcars!B1:D5")
+```
+
+```{r}
+read_excel(xlsx_example, range = "B1:D5")
+```
+
+Para elegir un subconjunto de columnas:
+
+```{r}
+read_excel(xlsx_example, range = cell_cols("B:D"))
+```
+
+Para elegir un subconjunto de renglones:
+
+```{r}
+read_excel(xlsx_example, range = cell_rows(1:10))
+```
+
+## Resumen
+Si combinamos todo lo anterior se ve así:
+
+```{r}
+read_excel(xlsx_example, range="B1:D5", sheet=2)
+```

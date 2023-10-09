@@ -1,0 +1,168 @@
+---
+title: "Shiny"
+author: "Miguel Angel Escalante"
+output:
+  html_document:
+    toc: true
+    toc_depth: 3
+    toc_float: true
+    theme: spacelab
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(shiny)
+library(ggplot2)
+```
+
+## ¿Por qué?
+
+Shiny es un framework para hacer aplicaciones web en R, es interesante hacer esto porque no todos sabemos (ni queremos saber), javascript, php, o algún otro lenguaje para programar en web.
+
+Usualmente nos interesa saber esto para hacer un primer reporte o un primer *mockup* de lo que queremos visualizar, sin embargo no siempre se tiene al equipo necesario para desarrollar a fondo una aplicación compleja para visualización de datos. 
+
+Shiny nos ayuda a que nuestro trabajo se vuelva interactivo y se puedan hacer muchas más cosas con nuestras visualizaciones, construír dashboards es el siguiente paso lógico con esto. Se puede resumir un reporte enorme en un simple dashboard con filtros especiales a lo que queramos hacer. 
+
+## Basics
+
+Shiny requiere dos componentes para funcionar, un frontend y un backend. Al frontend se le llama `ui`, y al backend le llamamos `server`. En cada uno de ellos vamos a controlar distintos componentes de la aplicación, aunque a veces podremos mezclarlos. 
+
+La parte de `ui` contiene todos los inputs y outputs de la aplicación. Inputs pueden ser seleccionadores, sliders, botones, etc. Los outputs pueden ser tablas, gráficos, texto según se requiera. 
+
+En el `server` está  la parte que controla todos los componentes "backend" de la aplicación, ¿que significa esto? Lo que no se ve visualmente pero alimenta las visualizaciones. 
+
+Estos dos componentes pueden funcionar como dos archivos separados `ui.R` y `server.R` o se puede tener un único archivo con toda la información: `app.R`. 
+
+Existe otro tipo de archivo dentro del paquete de archivos que usa shiny: `global.R`. Este archivo se corre antes que todos los demás haciendo más ordenada la carga de paquetes y el acceso inicial a los datos; también si se tienen algunos procesos iniciales como inicialización de variables, carga de mapas base, etc. Este es el archivo para hacerlo.
+
+### server.R
+En el archivo `server.R` queremos hacer todos los cálculos relacionados con las visualizaciones y las visualizaciones en si. Aquí hacemos el proceso de los datos, observamos las variables, filtramos, y generamos los distintos outputs que requiere nuestra aplicación web. Todo en lenguaje R con algunas modificaciones en la estructura para poderlas correr. 
+
+Un ejemplo de un archivo `server.R`, notar las ligeras diferencias con las funciones usuales de `R`. 
+
+```{r, results='hide', eval=FALSE}
+function(input, output) {
+  output$distPlot <- renderPlot({
+    x    <- faithful[, 2]  # Geyser data
+    bins <- seq(min(x), max(x), length.out = input$bins + 1)
+
+    hist(x, breaks = bins, col = 'darkgray', border = 'white',
+         main='Histograma!', ylab = 'Frecuencia')
+  })
+}
+```
+
+### ui.R
+El archivo `ui.R` es donde daremos forma a nuestra aplicación web, aquí se hace el posicionamiento de todos los elementos, también aquí es donde pondremos los resultados de todas las funciones de graficación construídas en `server.R`.
+
+Emeplo de un arvchivo `ui.R`
+```{r, results='hide', eval=FALSE}
+shinyUI(fluidPage(
+  # Título
+  titlePanel("Geyser Data"),
+  # Un sidebar con su slider.
+  sidebarLayout(
+    sidebarPanel(
+       sliderInput("bins",
+                   "Number of bins:",
+                   min = 1,
+                   max = 50,
+                   value = 30)
+    ),
+    mainPanel(
+       plotOutput("distPlot")
+    )
+  )
+))
+```
+
+### App.R
+Lo mínimo que necesita Shiny para correr es lo siguiente:
+```{r, results='hide', eval=FALSE}
+library(shiny)
+ui <- fluidPage()
+server <- function(input, output){}
+shinyApp(ui = ui, server = server)
+```
+No aparece nada, pero es importante notar que tampoco da errores. Esto es una función para el ui, otro para el server y la última línea corre la aplicación.
+
+## ¿Cómo correr una App?
+
+Para correr un app, lo más sencillo es abrir uno de estos dos archivos y picar el botón de `Run App`. Sin embargo no siempre queremos abrir Rstudio para correr nuestra aplicación. 
+
+```{r, results='hide', eval=FALSE}
+library(shiny)
+runApp("nombre_app")
+## Equivalente 
+shiny::runApp("nombre_app")
+```
+Esto es asumiendo que están en el directorio correcto, donde el directorio correcto es el directorio donde se tiene la app y los archivos necesarios para correrla. 
+
+## Widgets
+Tenemos una variedad interesante de botones y widgets para interactuar con la app: 
+
+function|widget
+----------|-----------
+`actionButton`| pica aquí:
+`checkboxInput`| Checkbox.
+`checkboxGroupInput`|Varios Checkboxes!
+`dateInput`| Selecciona una fecha
+`dateRangeInput`| Dos calendarios para poner fechas. 
+`fileInput`| Seleccionar archivo y subir
+`helpText`| Una manera distinta de meter más texto :)
+`numericInput`| Numeros!
+`radioButtons`| Selectores de botoncito!
+`selectInput`| Dropdown para seleccionar
+`sliderInput`| Slider!
+`submitButton`| botón de Submit
+`textInput`| Receptor de texto
+
+Ver [aqui](http://shiny.rstudio.com/gallery/widget-gallery.html) para ver la relación selecciones-valores
+
+```{r, results='hide', eval=FALSE}
+library(shiny)
+ui <- fluidPage(dateRangeInput("",inputId = "a"))
+server <- function(input, output){}
+shinyApp(ui = ui, server = server)
+```
+
+## Reactive
+
+Esto es lo que diferencía Shiny de un documento, por un lado un documento es algo estático que podemos ver y leer, este tipo de aplicaciones nos dan la oportunidad de interactuar con el contenido de diversas maneras de tal forma que nos ayude a entender y a tener nuevas ideas con respecto a nuestros datos. 
+
+```{r, results='hide', eval=FALSE}
+
+ui <- shinyUI(fluidPage(
+  titlePanel("Ejemplo Reactividad"),
+  sidebarLayout(
+    sidebarPanel(
+      helpText("Variables!"),
+      selectInput("var", 
+                  label = "Elige Variable ",
+                  choices = c("Azul", "Blanco",
+                              "Verde", "Rojo"),
+                  selected = "Rojo"),
+      sliderInput("range", 
+                  label = "Rango:",
+                  min = 0, max = 100, value = c(0, 100))
+      ),
+    mainPanel(
+      textOutput("text1")
+    )
+  )
+))
+
+server <- function(input, output) {
+    output$text1 <- renderText({ 
+      paste("You have selected", input$var)
+    })
+}
+
+shinyApp(ui = ui, server = server)
+```
+
+Funciona de la siguiente manera: 
+
+1. Se ingresa un valor.
+2. Se actualiza la variable.
+3. Se hacen los cálculos correspondientes con la nueva variable. 
+4. Se actualiza el output.

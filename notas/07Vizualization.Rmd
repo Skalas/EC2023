@@ -1,0 +1,386 @@
+---
+title: "Visualización con R"
+author: "Miguel Angel Escalante Serrato"
+date: "Oct, 2022"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 3
+    toc_float: true
+    theme: spacelab
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = T, warning = F, error = F, message = F)
+library(ggplot2)
+library(dplyr)
+library(magrittr)
+
+```
+
+# Introducción
+
+La graficación es una manera eficiente de resumir, y mostrar información. Es fundamental entender el contexto para tener más información con respecto a lo que se está graficando. Muchas veces es mejor hacer varias gráficas simples en lugar de una muy compleja. 
+
+No hay teoría muy complicada con respecto a las gráficas, de hecho no hay mucha en lo absoluto. Usualmente cuando se revisan las distintas gráficas y formas, usualmente libros y cursos se siguen a otras cosas complejas. (léase cursos de estadística, probabilidad, etc.) Lo que vemos actualmente nos deja mucho que desear de cómo se usan las gráficas y más aún nos revela la necesidad de ahondar más en estos temas y revisarlos más a fondo. 
+
+
+John Turkey, nos dice en cuatro frases el verdadero propósito de la visualización de información: 
+
+1. Las gráficas son para análsisis cualitativos o descriptivos y quizá semi cuantitativos, nunca para análisis profundo cuantitativo. 
+2. Las gráficas son para comparaciones, comparaciones entre grupos, no para acceder a cantidades particulares. 
+3. Las gráficas son para impactar, de primera instancia, mover percepción, transmitir información, no se debería de pensar mucho para llegar a la conclusión. 
+4. Las gráficas deberían de reportar anáisis de datos trabajado, fino y cuidadoso. No se debería intentar que la gráfica sea en si el análisis. Las gráficas están para fortalecer el análisis, no para fundamentarlo. 
+
+## Análisis de Datos con Gráficos. 
+
+Ahora veremos ejemplos de visualizaciones que se pueden hacer para entender más a profundidad los datos. 
+
+### Iris
+
+Del conjunto de datos de Fisher, [Iris](https://en.wikipedia.org/wiki/Iris_(plant)), que contiene información de medidas de plantas usado por Fisher para ilustrar análisis de discriminante linear. Es de los conjuntos de datos más usados para ejemplos. 
+
+Un ejemplo de visualización: 
+
+```{r}
+ggplot(iris, aes(Petal.Length)) + geom_histogram()
+```
+Podemos ver que hay al menos dos gupos de flores según su longitud de pétalo. 
+
+Sin embargo si ponemos una capa más de complejidad en la visualización podemos observar un poco más acerca de estos. 
+
+
+```{r}
+library(ggthemes)
+ggplot(iris, aes(Petal.Length, Petal.Width, color=Species)) +
+       geom_point() + theme(legend.position="bottom") +
+       scale_colour_colorblind()
+```
+
+Con esta nueva visualización podemos ver una diferencia entre tres especies de plantas y cómo hay una clara relación entre la longitud y amplitud del pétalo. 
+
+### Ski
+
+En el campeonato de Ski de 2011, se tomaron medidas de velocidad y el headline decía lo siguiente: "El mejor tiempo lo tuvo un hombre y el peor tiempo lo tuvo una mujer."
+
+¿Pueden ver qué está mal? 
+
+```{r}
+data(SpeedSki, package = "GDAdata")
+ggplot(SpeedSki, aes(x=Speed, fill=Sex)) + xlim(160, 220) +
+       geom_histogram(binwidth=2.5) + xlab("Speed (km/hr)") +
+       facet_wrap(~Sex, ncol=1) + ylab("") +
+       theme(legend.position="none")
+```
+
+Resulta que había varias categrorías, y también resultó que participaron muchas menos mujeres, también está el hecho que en una categoría no participaron mujeres en lo absoluto: 
+
+```{r}
+ggplot(SpeedSki, aes(Speed, fill=Sex)) +
+       geom_histogram(binwidth=2.5) + xlab("Speed (km/hr)") +
+       ylab("") + facet_grid(Sex~Event) +
+       theme(legend.position="none")
+```
+
+Es importante dejar claro lo que tenemos en los datos, siempre se puede mostrar una versión de la realidad sesgada; sin embargo para entender lo que sea que estudiemos hay que ver todas las posibles maneras de mostrarlo. 
+
+  
+## Contexto
+
+El análisis de gráficas no puede quedar solo: Todo resultado obtenido de los gráficos debe de ser verificado con análisis estadístico. Usualmente se usa la graficación para verificar resultados estadísticos, sin embargo también la estadística nos debe de dar luz sobre los resultados que aparecen en las visualizaciones. Ver es creer, pero probar y verificar es convincente.
+
+Las visualizaciones nos ayudan a relvelar estructura más que detalles, para ver diferencias considerables más que para entender las diferencias finas. Si se requieren valores exactos se deben de pensar en tablas. Las tablas con datos y las gráficas no son competidores sino complementarios. Cuando pensamos en reportes impresos, es difícil decidir en qué poner, si tabla o gráficas, sin embargo, con un reporte digital, se puede pensar en incluír las dos opciones. 
+
+La importancia de la visualización de datos puede ser subestimada, sin embargo no es nada fácil. Una visualiación bien hecha puede cambiar perfectamente la visión de un fenómeno a estudiar. El problema puede ser entender el problema y buscar una visualización que plasme lo que queremos decir y el entendimiento del fenómeno. No hay una teoría ni un método establecido, más bien guías y ciertas reglas que podemos estudiar. 
+
+> Yet if it does not seem a moment's thought,
+> Our stiching and unstiching has been naught. 
+
+Es una analogía interesante a lo que decimos.
+
+## TL;DR
+
+1. El análisis gráfico se usa para revelar información del dataset, es una herramienta exploratoria. 
+2. Visualizaciones sencillas pueden dar bastante infomaciónn acerca del fenómeno
+3. Formato y escalado son importantes
+4. Distintos gráficos nos pueden dar más información acerca de lo obsrvado
+
+# Variables Continuas
+
+Una variable continua en principio puede tomar cualquier valor dentro del rango dado $(0,1)$, por ejemplo. Las variables continuas en la práctica usualmente están redondeadas a algún nivel de precisión. Hay muchas maneras de describir variables continuas, dependiendo del énfasis que se le quiera dar es la elección. Dada la gran cantidad de características que se puedan ocurrir caracterizar, hay muchas maneras de visualizar variables continuas. 
+
+Nos enfocaremos en dos: 
+
+* Boxplots (Diagrama de caja y brazo)
+* Histogramas
+
+## Características a buscar
+
+* **Asimetría**
+Distribuciones simétricas o sesgadas hacia algún lado (distribuciones de ingreso).
+* ***Outliers***
+Valores que están muy lejanos al resto de las observaciones, ojo estos pueden contener información valiosa. 
+* **Multimodalidad**
+En caso que haya más de una "joroba" en la distribución de los valores. 
+* **Gaps**
+Puede ser natural que no haya un área del rango de las variables (calificaciones de exámenes).
+* **Amontonamiento (heaping)**
+Hay veces que por facilidad los valores se acumulan en un mismo valor particular, o especial. (Hora denuncias)
+* **Redondeo**
+Registro de valores redondeados (edad)
+* **Imposibles**
+Registro de valores que no son posibles (Edades negativas)
+* **Errores**
+Registro incorrecto de valores. (edades de 99 anyone ¿?)
+
+Las visualizaciones como los histogramas y los boxplots nos ayudan a entender estas características, sin embargo reitero que se requiere también un análisis estadístico de los valores. 
+
+De las estadísticas que describen a una vriable probablemente la media es la medida más común y usada para describir los valores, y usualmente para hacer comparaciones de medias se usa bastante la prueba $t$. La prueba $t$ depende del supuesto que la variable es normal, aunque este supuesto no es tan riguroso y hay maneras de datle la vuelta; esto es para explicar el hecho que también hay que hacer pruebas de normalidad (léase qq-plots, por ejemplo). 
+
+## Ejemplos
+
+### Pima
+
+```{r}
+library(gridExtra)
+data(Pima.tr2, package="MASS")
+h1 <- ggplot(Pima.tr2, aes(glu)) + geom_histogram()
+h2 <- ggplot(Pima.tr2, aes(bp)) + geom_histogram()
+h3 <- ggplot(Pima.tr2, aes(skin)) + geom_histogram()
+h4 <- ggplot(Pima.tr2, aes(bmi)) + geom_histogram()
+h5 <- ggplot(Pima.tr2, aes(ped)) + geom_histogram()
+h6 <- ggplot(Pima.tr2, aes(age)) + geom_histogram()
+grid.arrange(h1, h2, h3, h4, h5, h6, nrow=2)
+```
+
+Las distribuciones de variables plasma, presión arterial y bmi parecen ser simétricas, *skin* tiene algunos outliers, la distribucío de *ped* se ve sesgada y con algunos outliers. Podemos ver también que los grupos de edad son jóvenes. 
+
+```{r}
+library(dplyr)
+PimaV <- select(Pima.tr2, glu:age)
+par(mar=c(3.1, 4.1, 1.1, 2.1))
+boxplot(scale(PimaV), pch=16, outcol="red")
+```
+
+Todo esto se resume muy bien en una sola gráfica de boxplots, que nos ayuda a entender lo que está pasando con una sola vista más compacta. 
+
+### Pearson
+
+Tomaremos los datos de Karl Pearson, que contiene 1078 alturas apareadas de padres e hijos. Grafiquémoslos en histogramas para entender cómo se ven y en este caso nos interesará la normalidad de las variables: 
+
+```{r}
+library(readr)
+father.son <- read_tsv('pearson.txt')
+names(father.son) <- c('fheight','sheight')
+c2 <- ggplot(father.son, aes(sheight)) + 
+             geom_histogram(aes(y = ..density..), binwidth=1) +
+             geom_density() + xlim(58, 80) + ylim(0, 0.16) +
+             xlab("ht (inches)") + ylab("") + ggtitle("Sons")
+p2 <- ggplot(father.son, aes(fheight)) + 
+             geom_histogram(aes(y = ..density..), binwidth=1) +
+             geom_density() + xlim(58, 80) + ylim(0, 0.16) +
+             xlab("ht (inches)") + ylab("") +
+             ggtitle("Fathers")
+grid.arrange(c2, p2, nrow = 1)
+```
+Por lo que se ve de las gráficas y comparando con la imagen que se tiene de normalidad parece que la distribución de las alturas de los hijos es más normal que la de los padres, ahora probaremos esta hipótesis con otra prueba gráfica: qq-plot: 
+
+```{r}
+with(father.son, {
+     qqnorm(sheight, main="Sons", xlab="",
+            ylab="", pch=16, ylim=c(55,80))
+     qqline(sheight)
+     qqnorm(fheight, main="Fathers", xlab="",
+            ylab="", pch=16, ylim=c(55,80))
+     qqline(fheight)})
+```
+
+
+## ¿Qué gráficas se pueden ocupara para variables continuas?
+
+1. Histogramas
+2. Boxplots
+3. dotplot
+4. rugplot
+5. Aproximación a la densidad
+6. Q-Q plot
+
+## TL;DR 
+
+* Hay muchas características que pueden salir de la frecuencia en las distribuciones.
+* No hay una versión óptima por tipo de gráfica, ayuda ver distintas versiones hasta encontrar la más clara. 
+* Los histogramas ayudan a entender y enfatizar las características de los datos, mientras que las estimaciones de densidad nos ayudan a ver un modelo subyasciente (aunque no siempre)
+* Los Boxplots nos ayudan a identificar outliers y comparar distribuciones entre subgrupos de los datos.
+
+
+# Variables Categóricas
+
+A comparación de las variables continuas, las variables categóricas tienden a estar más limitadas en el rango de gráficas a utilizar, las opciones más utilizadas con las categorías son las gráficas de barras <strike>y los pie charts</strike>.
+
+A veces se sugiere que se pongan puntos con cierto ruido alrededor de los valores, sin embargo no necesariamente se ayuda a cuando se tienen muchos datos, aunque puede ser que se pueda ver algo. Sin embargo tampoco es tan recomendado.
+
+En las varibles categóricas usualmente no hay tanta información pero es importante verlos para seguir adelante dentro de análisis más complejos, hay veces que información sencilla y concreta de variables categóricas se pierde en gráficos más complejos.
+
+## Características
+
+- Patrones inesperados de resultados: Encontrar categorías con más observaciones de las esperadas.
+- Distribuciones desequilibradas: Podría ser que haya un sesgo en la toma de las observaciones, sólo un sexo, sólo un grupo de edad. Distintas características que pueden ser dominantes en el estudio.
+- Categorías extras: En el estudio se tienen categorías como "M" y "F", pero dentro de su base observan "male", "female", "m","f", "ma", "fe", etc.
+- Experimentos desbalanceados: Existe la posibilidad que en el experimento no se tenga un área de valores posibles dentro de la muestra. Es importante conocer las características de la información que se tiene para poderla tomar en cuenta dentro del modelado.
+- Muchas categorías: Esto es especialmente problemático cuando se tienen preguntas abiertas: ¿Quién es su artista o grupo preferido?
+- No sabe, no contestó, errores, vacíos: En alguna encuesta que trabajé se tenían las siguientes características:
+    + No contestó
+    - No contestó (espontáneo)
+    - No quiso contestar.
+    - NA
+
+## Variables Nominales
+
+Las variables nominales son aquellas que no tienen orden en sus categorías; el color de pintura, marca de un auto, distintos experimentos, etc.
+
+
+### Aspirinas
+
+Experimento de uso de aspirinas después de un infarto a miocardio para detener la muerte de los pacientes.
+
+```{r}
+data(Fleiss93, package="meta")
+Fleiss93 <- within(Fleiss93, {
+                   total <- n.e + n.c
+                   st <- reorder(study, -(total)) })
+ggplot(Fleiss93, aes(st, total)) + geom_bar(stat="identity") +
+       xlab("") + ylab("") + ylim(0,20000)
+
+```
+
+Un experimento contiene una concentración muy importante de los experimentos por lo que si agrupamos todos los que contengan menos de 2000 individuos, tenemos el siguiente gráfico:
+
+```{r}
+
+Fleiss93 <- within(Fleiss93, st1 <- as.character(study) )
+Fleiss93 %<>% mutate(st1 = ifelse(total>2000,st1, "REST"))
+ggplot(Fleiss93, aes(st1, total)) + geom_bar(stat="identity") +
+       xlab("") + ylab("") + ylim(0,20000)
+```
+
+
+Si agrupamos todos los estudios menores a 2000 individuos, se tiene otro tipo de visualización mucho más clara y también se entiende bastante claramente el hecho que el experimento ISIS-2 contiene mucha más poblacioón que todos los demás.
+
+### Titanic
+
+Dentro de la base de datos que ya vimos en la clase pasada, veremos que si hacemos los distintos gráficos a misma escala con distintas vriables tenemos una historia más interesante que sólo el conteo de muertes:
+
+```{r}
+library(gridExtra)
+Titanic1 <- data.frame(Titanic)
+p <- ggplot(Titanic1, aes(weight=Freq)) +
+            ylab("") + ylim(0,2250)
+cs <- p + aes(Class) + geom_bar(fill="blue")
+sx <- p + aes(Sex) + geom_bar(fill="green")
+ag <- p + aes(Age) + geom_bar(fill="tan2")
+su <- p + aes(Survived) + geom_bar(fill="red")
+grid.arrange(cs, sx, ag, su, nrow=1, widths=c(3, 2, 2, 2))
+```
+
+Deberías de tener una idea en la cabeza de lo que quieres mostrar antes de graficar cualquier cosa, de esta forma es más fácil que te sorprendas de las cosas que puedas encontrar.
+
+Discutan el expectativas vs gráfico.
+
+## Variables Ordinales
+
+Muchas veces cuando se levanta una encuesta, se tiene en cuenta un rango de valores posibles para que el encuestado "califique" la variable que medimos, "En la escala del 1 al 5 .....".
+
+## Datos discretos, conteos y enteros:
+
+Para estas visualizaciones podemos tomar en cuenta la ocurrencia de distintas variables.
+
+## TL;DR
+
+- Los gráficos de barras son una manera muy sencilla de graficar y mostrar información, sin embargo aunque haya simpleza en la manera de presentarlos pueden mostrar cosas que no se esperaban y nos pueden dar un *insight* insteresante.
+- Los gráficos de barras se pueden usar para graficar variables nominales, ordinales y discretas.
+- El orden de las barras afeta la manera de ver los resultados.
+
+# Estructura, dependencias, relaciones y asociaciones.
+
+Buscaremos explicar pares de variables y sus relaciones, para esto un scatterplot es la manera más sencilla y común de hacerlo. El scatterplot nos ayuda a buscar infomración que no necesariamente es obvia de alguna tabla o de los resúmenes de la información. El verdadero valor de estos gráficos reside en ver las interacciones entre dos variables, también nos ayudan a buscar valres extremos. A pesar de la información que nos pueda arrojar un scatterplot se recompenda que se sigan graficando las distribuciones univariadas para entender el proceso.
+
+Para las olimpiadas de 2012 se muestra el scatterplot entre altura y peso:
+
+```{r}
+data(oly12, package="VGAMdata")
+ggplot(oly12, aes(Height, Weight)) + geom_point() +
+       ggtitle("Athletes at the London Olympics 2012")
+```
+
+## ¿Qué buscamos en los Scatterplots?
+
+Acerca de [correlación](https://www.youtube.com/watch?v=VFjaBh12C6s)
+
+- Relaciones entre variables, puede que haya una fuerte relación entre las variables, buscamos causalidad aunque debe quedar claro que es muy complicado establecer esta relación en general.
+- Asociaciones, grupos de variables que puedan estar relacionados entre si, sin ser afectados por la misma causa directa.
+- Valores extremos: Puede haber casos de variables extremas en la relación de las variables sin que haya algún extremo en ninguna de las variables individuales.
+- Clusters: Ayuda buscar grupos de individuos, como el que vimos de las flores, la clase pasada.
+- Gaps: Ocasionalmente algunas parejas de vlores son complicadas que aparezcan juntas,
+- Barreras: barreras naturales dentro de la variable, por ejemplo: no se puede tener más edad laboral que la edad actual del individuo.
+- Condicionales: hay veces que es más faćil entender al variable con subgrupos de otra variable, ingreso vs jubilación.
+
+## Movie ratings
+
+```{r}
+library(ggplot2movies)
+ggplot(movies, aes(votes, rating)) + geom_point() + ylim(1,10)
+```
+
+## Líneas y suavizado.
+
+```{r}
+data(Cars93, package="MASS")
+ggplot(Cars93, aes(Weight, MPG.city)) + geom_point() +
+       geom_smooth(colour="green") + ylim(0,50)
+```
+
+Vemos cómo conforme aumenta el peso las millas por galón tieneden a disminuír, (autos más grandes usan más combustible)
+
+## Alturas de las personas
+
+```{r}
+ggplot(father.son, aes(fheight, sheight)) + geom_point() +
+       geom_smooth(method="lm", colour="red") +
+       geom_abline(slope=1, intercept=0)
+```
+
+Esto nos ayuda a ver que puede que haya una buena relacioń entre las variables, por lo que pintamos la línea $y=x$, para comparar. Ahora, veamos
+
+```{r}
+ggplot(father.son, aes(fheight, sheight)) + geom_point() +
+       geom_smooth(method="lm", colour="red", se=FALSE) +
+       stat_smooth()
+```
+
+## Grupos de categorías
+
+Filtremos por grupos de atletas, hombres y mujeres.
+
+```{r}
+ggplot(oly12, aes(Height,Weight))+geom_point(size=1)+facet_wrap(~Sex,ncol=1)
+```
+```{r}
+oly125 <- mutate(oly12,Sport=abbreviate(Sport,12))
+ggplot(oly12, aes(Height,Weight))+geom_point(size=1)+facet_wrap(~Sport)
+```
+
+
+## TL;DR
+- Scatterplots toman diferentes formas y regresan mucha informacióń acerca de la relación de dos variables.
+- Agregar los suavizados es trivial y ayuda con el modelado de nuesrta información.
+
+
+# Ejercicio de Clase
+
+Generen con la base de datos del proyecto un análisis base de las diferentes variables.
+
+- Generen un análisis gráfico de la base de datos.
+- Exploren las diferentes variables y sus relaciones.
+- Expliquen las variables nominales y sus cruces con las contínuas.
+
+Esto les dará contexto para el proyecto que estamos desarrollando.
