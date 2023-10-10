@@ -1,0 +1,271 @@
+---
+title: "Librerías Importantes"
+date: "`r format(Sys.time(), '%Y-%m-%d')`"
+output:
+  html_document:
+    toc: yes
+    toc_depth: 2
+    toc_float: true
+    theme: spacelab
+
+---
+
+
+```{r, include = F}
+knitr::opts_chunk$set(echo = T, error = F, message = F, warning = F)
+library(dplyr)
+library(nycflights13)
+library(ggplot2)
+```
+
+# Base de datos a trabajar
+La base de datos que estaremos trabajando como dummy será la siguiente:
+```{r}
+flights
+```
+
+Noten que lo que nos muestra R es muy diferente a lo que nos muestra con el `data.frame` normal:
+```{r, eval = F}
+data.frame(head(flights))
+```
+
+## Tibble
+
+Es una reimplementación del `data.frame` usual, son flojos, (una ventaja cuando tenemos muchos datos), son limpios y nos ayudan de diferentes maneras a trabajar de manera más sencilla.
+
+# Dplyr
+Veremos los siguientes verbos implementados en el paquete `dplyr`:
+
+  * `filter()`
+  * `arrange()`
+  * `select()`
+  * `mutate()`
+  * `summarise()`
+  * `group_by()`
+
+Todos los verbos comparten algunas cosas:
+
+  * El primer argumento es un `data.frame`
+  * Los siguientes argumentos describen lo que se hará con los datos, las variables se escriben sin comillas.
+  * El resultado es un nuevo `data.frame` (tibble)
+
+## Filter
+
+Filter es un verbo que nos permite filtrar renglones con base en sus valores de alguna columna:
+
+```{r}
+filter(flights, month == 12, day == 1)
+```
+Podemos además asignar la nueva base de datos a otra variable:
+
+```{r}
+(dec25 <- filter(flights, month == 12, day == 25)) # los paréntesis hacen que se imprima el resultado
+```
+
+### Comparaciones
+
+Es importante usar correctamente los operadores lógicos, uno de los errores más comunes es el siguiente:
+
+```{r, error=T}
+filter(flights, month=1)
+```
+MUY importante leer los errores que nos regresa R.
+
+### Aritmética Punto flotante
+Cuidado con los siguientes resultados:
+```{r}
+print(sqrt(2) ^ 2 == 2)
+print(1 / 49 * 49 == 1)
+```
+la manera de hacer estas comparaciones es la siguiente:
+```{r}
+near(sqrt(2) ^ 2,  2)
+```
+
+### Operadores lógicos
+Se pueden hacer operaciones más complejas con los filtros a implementar:
+
+```{r}
+filter(flights, month==1|month==12)
+```
+
+Los operadores que se usan son los siguientes
+
+* and: `&`.
+* or: `|`
+* not: `!`
+
+### NA's los NA's (not available)
+Los NA's son los valores que toman las variables cuando un valor no está presente, ojo que es importante notar que a diferencia de una codificación como un 99, el NA, nos permite hacer operaciones más interesantes con los datos.
+
+Tener cuidado además ya que son contagiosos...
+
+```{r}
+NA > 5
+10 == NA
+NA == NA
+```
+
+Pero tenemos una ayuda:
+```{r}
+is.na(NA)
+```
+
+Filter nos ayuda por default a quitar estos valores:
+
+```{r}
+df <- tibble(x = c(1, NA, 3))
+filter(df, x > 1)
+```
+
+
+## Arrange
+Arrange es un verbo que nos ayuda a ordenar los renglones del `data.frame`, si se le agregan más de una columna ordena con respecto a esos valores.
+
+```{r}
+arrange(flights, year, month, desc(day))
+```
+
+### Desc
+
+Con esta función podemos ordenar a manera descendiente(por default es ascendiente).
+
+```{r}
+arrange(flights, desc(dep_delay))
+```
+
+### Tratamiento de NA
+Los NA's van al final.
+```{r}
+
+df <- tibble(x = c(5, 2, NA))
+arrange(df, x)
+```
+
+
+## Select
+Select nos ayuda a filtrar las variables que de hecho queremos ocupar, la base de `flights` es relativamente pequeña con 19 variables, sin embargo, con bases de datos más grandes es vital poder hacer este filtro.
+
+```{r}
+select(flights, year, month, day) #Enumeración de variables
+select(flights, year:day) # Rango de variable
+select(flights, -(year:day)) # select negativo, GRACIAS HADLEY!!!
+```
+
+La función select tiene ciertos *helpers* que nos ayudan a filtrar de maneras más inteligentes:
+
+* `starts_with()`
+* `ends_with()`
+* `contains()`
+* `num_range("x",1:3)`: x1, x2, x3.
+
+### Cambio de nombres
+Se puede usar select para cambiar de nombre de alguna variable, sin embargo, como sólo selecciona la variable, se pierden el resto.
+```{r}
+select(flights, mes=month)
+```
+La mejor manera de hacer esto es con la función `rename()`:
+
+```{r}
+rename(flights, mes=month)
+```
+
+## Mutate
+Genera nuevas variables, a partir de las otras variables, se pueden usar conforme se vayan creando:
+
+```{r}
+flights %>%
+    mutate(
+        speed=distance/ air_time * 60,
+        speed2 = speed*2
+    )
+```
+
+Si sólo quieres las nuevas columnas, se puede usar `transmute()`:
+
+```{r}
+library(magrittr)
+flights %>%
+    mutate(
+        speed=distance/ air_time * 60,
+        speed2 = speed*2
+    )
+```
+
+Aritmética divertida con variables vectorizadas
+```{r}
+flights %>%
+    mutate(
+        dep_time,
+        hour = dep_time %/% 100,
+        minute = dep_time %% 100,
+        minutes = hour*60 + minute
+    ) %>%
+    select(hour, minute, minutes)
+
+```
+
+Se pueden hacer sumas acumuladas y desfases.
+```{r}
+(x <- 1:10)
+lag(x)
+lead(x)
+cumsum(x)
+cummean(x)
+
+```
+## Summarise
+Colapsa el data frame a un solo renglón con una función de agregación:
+```{r}
+flights %>%
+    summarise(
+        delay = mean(dep_delay, na.rm = TRUE),
+        delay_sd = sd(dep_delay, na.rm = TRUE)
+    )
+```
+Sin embargo a pesar de ser muy útil, se vuelve todavía más útil cuando lo apareas con `group_by`.
+
+```{r}
+flights %>%
+    group_by( year, month, day) %>%
+    summarise(delay = mean(dep_delay, na.rm = TRUE))
+```
+
+# Pipe
+El `%>%` es su amigo, úsenlo, para que su código se vea más limpio (:.
+
+Ejemplo sin pipe:
+
+```{R}
+by_dest <- group_by(flights, dest)
+delay <- summarise(by_dest,
+  count = n(),
+  dist = mean(distance, na.rm = TRUE),
+  delay = mean(arr_delay, na.rm = TRUE)
+)
+#> `summarise()` ungrouping output (override with `.groups` argument)
+delay <- filter(delay, count > 20, dest != "HNL")
+
+# It looks like delays increase with distance up to ~750 miles
+# and then decrease. Maybe as flights get longer there's more
+# ability to make up delays in the air?
+ggplot(data = delay, mapping = aes(x = dist, y = delay)) +
+  geom_point(aes(size = count), alpha = 1/3) +
+  geom_smooth(se = FALSE)
+```
+
+Ejemplo con pipe:
+
+```{r}
+flights |>
+    group_by(dest) |>
+    summarise(
+        count = n(),
+        dist = mean(distance, na.rm = TRUE),
+        delay = mean(arr_delay, na.rm = TRUE)
+    ) %>%
+    filter(count > 20, dest != "HNL") %>%
+    ggplot(data = ., mapping = aes(x = dist, y = delay)) +
+    geom_point(aes(size = count), alpha = 1/3) +
+    geom_smooth(se = FALSE)
+```

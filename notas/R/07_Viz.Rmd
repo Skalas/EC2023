@@ -1,13 +1,13 @@
 ---
 title: "Visualización con R"
 author: "Miguel Angel Escalante Serrato"
-date: "Oct, 2022"
+date: "`r format(Sys.time(), '%Y-%m-%d')`"
 output: 
-  html_document:
-    toc: true
-    toc_depth: 3
-    toc_float: true
-    theme: spacelab
+html_document:
+   toc: true
+   toc_depth: 3
+   toc_float: true
+   theme: spacelab
 ---
 
 ```{r setup, include=FALSE}
@@ -173,26 +173,26 @@ library(readr)
 father.son <- read_tsv('pearson.txt')
 names(father.son) <- c('fheight','sheight')
 c2 <- ggplot(father.son, aes(sheight)) + 
-             geom_histogram(aes(y = ..density..), binwidth=1) +
-             geom_density() + xlim(58, 80) + ylim(0, 0.16) +
-             xlab("ht (inches)") + ylab("") + ggtitle("Sons")
+       geom_histogram(aes(y = ..density..), binwidth=1) +
+       geom_density() + xlim(58, 80) + ylim(0, 0.16) +
+       xlab("ht (inches)") + ylab("") + ggtitle("Sons")
 p2 <- ggplot(father.son, aes(fheight)) + 
-             geom_histogram(aes(y = ..density..), binwidth=1) +
-             geom_density() + xlim(58, 80) + ylim(0, 0.16) +
-             xlab("ht (inches)") + ylab("") +
-             ggtitle("Fathers")
+       geom_histogram(aes(y = ..density..), binwidth=1) +
+       geom_density() + xlim(58, 80) + ylim(0, 0.16) +
+       xlab("ht (inches)") + ylab("") +
+       ggtitle("Fathers")
 grid.arrange(c2, p2, nrow = 1)
 ```
 Por lo que se ve de las gráficas y comparando con la imagen que se tiene de normalidad parece que la distribución de las alturas de los hijos es más normal que la de los padres, ahora probaremos esta hipótesis con otra prueba gráfica: qq-plot: 
 
 ```{r}
 with(father.son, {
-     qqnorm(sheight, main="Sons", xlab="",
-            ylab="", pch=16, ylim=c(55,80))
-     qqline(sheight)
-     qqnorm(fheight, main="Fathers", xlab="",
-            ylab="", pch=16, ylim=c(55,80))
-     qqline(fheight)})
+       qqnorm(sheight, main="Sons", xlab="",
+              ylab="", pch=16, ylim=c(55,80))
+       qqline(sheight)
+       qqnorm(fheight, main="Fathers", xlab="",
+              ylab="", pch=16, ylim=c(55,80))
+       qqline(fheight)})
 ```
 
 

@@ -1,6 +1,7 @@
 ---
 title: "Shiny"
 author: "Miguel Angel Escalante"
+date: "`r format(Sys.time(), '%Y-%m-%d')`"
 output:
   html_document:
     toc: true
@@ -62,14 +63,14 @@ shinyUI(fluidPage(
   # Un sidebar con su slider.
   sidebarLayout(
     sidebarPanel(
-       sliderInput("bins",
-                   "Number of bins:",
-                   min = 1,
-                   max = 50,
-                   value = 30)
+      sliderInput("bins",
+                  "Number of bins:",
+                  min = 1,
+                  max = 50,
+                  value = 30)
     ),
     mainPanel(
-       plotOutput("distPlot")
+      plotOutput("distPlot")
     )
   )
 ))
