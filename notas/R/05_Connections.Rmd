@@ -94,10 +94,11 @@ sin embargo hay conexión para la mayoría de las bases de datos los más comune
 
 ```{r}
 library(dbplyr)
+dotenv::load_dot_env(file='.env')
 con <- DBI::dbConnect(RPostgreSQL::PostgreSQL(),
-  host = "0.0.0.0",
-  user = "postgres",
-  password = 'postgres'
+  host = Sys.getenv("PG_HOST"),
+  user = Sys.getenv("PG_USR"),
+  password = Sys.getenv("PG_PASS")
   )
 ```
 

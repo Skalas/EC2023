@@ -11,7 +11,6 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-
 ```
 
 # R 
@@ -53,15 +52,13 @@ el data frame nos ayuda a pensar en tablas y no sólo en clases o toda la comple
 inherente a un lenguaje de programación. 
 
 
-# ¿Por qué aprender a programar? 
+# ¿Por qué aprender R? 
 
-Una analogía a por qué aprender a programar `R` contra todos los demás softwares 
-de cómputo, es la siguiente: Usar SPSS (o software similar), es como ir en un 
-autobús, mientras que aprender a programar en `R` es como manejar tu mismo un auto. 
+R es bastante útil para el análisis de datos, es un lenguaje cuyo 
+fundamento está precisamente en estadística y probabilidad. Es una herramienta más a su 
+caja, en la que puede hacer análisis de datos, modelar, graficar, e inclusive hacer dashboards 
+interactivos, todo en un mismo lenguaje. Espero que esto sea al menos una introducción para que 
+puedan trabajar de manera más amena con una herramienta más. 
 
-La diferencia es evidente y la flexibilidad que te da el poder usar todas las 
-herramientas, es fantástica. Espero que este módulo les ayude a construír una 
-caja de herramientas más sólida para cuando lo necesiten. 
-
-Bienvenidos. :)
+:)
 

@@ -36,7 +36,7 @@ Estos dos componentes pueden funcionar como dos archivos separados `ui.R` y `ser
 Existe otro tipo de archivo dentro del paquete de archivos que usa shiny: `global.R`. Este archivo se corre antes que todos los demás haciendo más ordenada la carga de paquetes y el acceso inicial a los datos; también si se tienen algunos procesos iniciales como inicialización de variables, carga de mapas base, etc. Este es el archivo para hacerlo.
 
 ### server.R
-En el archivo `server.R` queremos hacer todos los cálculos relacionados con las visualizaciones y las visualizaciones en si. Aquí hacemos el proceso de los datos, observamos las variables, filtramos, y generamos los distintos outputs que requiere nuestra aplicación web. Todo en lenguaje R con algunas modificaciones en la estructura para poderlas correr. 
+En el archivo `server.R` queremoshacer todos los cálculos relacionados con las visualizaciones y las visualizaciones en si. Aquí hacemos el proceso de los datos, observamos las variables, filtramos, y generamos los distintos outputs que requiere nuestra aplicación web. Todo en lenguaje R con algunas modificaciones en la estructura para poderlas correr.
 
 Un ejemplo de un archivo `server.R`, notar las ligeras diferencias con las funciones usuales de `R`. 
 
