@@ -84,20 +84,6 @@ Where es el verbo que nos ayuda a filtrar renglones dentro del lenguaje:
   -- where month<12 and month >11;
 #+end_src
 
-#+RESULTS:
-| month | day |
-|-------+-----|
-|    12 |  12 |
-|    12 |  12 |
-|    12 |  12 |
-|    12 |  12 |
-|    12 |  12 |
-|    12 |  12 |
-|    12 |  12 |
-|    12 |  12 |
-|    12 |  12 |
-|    12 |  12 |
-
 ** Count
 Nos ayuda a contar los renglones que tenemos
 #+begin_src sql
