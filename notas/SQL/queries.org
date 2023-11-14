@@ -90,6 +90,7 @@ Nos ayuda a contar los renglones que tenemos
   select count(*) from flights;
 #+end_src
 
+
 ** distinct
 Nos ayuda a encontrar los valores únicos en las tablas.
 #+begin_src sql
@@ -99,13 +100,8 @@ Nos ayuda a encontrar los valores únicos en las tablas.
 ** Subqueries
 
 #+begin_src sql
-  select count(*) from (select distinct month, day from flights) md;
+  select count(*) as conteo from (select distinct f.month, f.day from flights f) md;
 #+end_src
-
-#+RESULTS:
-| count |
-|-------|
-|   365 |
 
 ** CTE's
 
@@ -116,30 +112,16 @@ Common Table expressions es una especie de tabla temporal que construímos para 
   select mdy.year from mdy limit 10;
 #+end_src
 
-#+RESULTS:
-| year |
-|------|
-| 2013 |
-| 2013 |
-| 2013 |
-| 2013 |
-| 2013 |
-| 2013 |
-| 2013 |
-| 2013 |
-| 2013 |
-| 2013 |
-
 ** Order by
 Ordena los resultados dada alguna regla establecida.
 #+begin_src sql
-select distinct month, day from flights order by month, day;
+select distinct month, day from flights order by month desc, day;
 #+end_src
 
 ** concat
 Nos ayuda a juntar varias columnas en una sola.
 #+begin_src sql
-select concat(month,'-',day,'-',year) from flights limit 10;
+select concat(month,'-',day,'-',year) as date_mdy from flights limit 10;
 #+end_src
 
 ** Parseo
@@ -147,23 +129,36 @@ select concat(month,'-',day,'-',year) from flights limit 10;
 Nos ayuda a castear algún tipo en otro tipo, para mayor referencia de los tipos de datos en pg [[https://www.postgresql.org/docs/current/datatype.html][ver acá]].
 
 #+begin_src sql
-  select concat(month,'-',day,'-',year)::date from flights limit 10;
+  select concat(month,'-',day,'-',year)::date as date from flights limit 10;
 #+end_src
 
 ** split
+
 #+begin_src sql
   with tabla as (select concat(month,'-',day,'-',year) as fecha from flights)
-  select split_part(fecha,'-',3) as lol  from tabla limit 10;
+  select split_part(fecha,'-',3) as year  from tabla limit 10;
 #+end_src
 
 ** group by
 agrupamos y hacemos una función sobre cada uno de los grupos.
+
 #+begin_src sql
-  select month, count(*) as num_flights
+  select month, day, count(*) as num_flights
     from flights
-   group by month;
+   group by month, day;
 #+end_src
 
+#+begin_src sql
+  --Ejercicio al lector
+    -- ¿Cuál es el promedio de vuelos diarios por mes ?
+  with recuento_diario as (
+    select month, day, count(*) as num_flights
+      from flights
+     group by month, day
+  ) select month, avg(num_flights) as daily_avg
+             from recuento_diario
+     group by month;
+#+end_src
 
 *** multiples columnas:
 Cada columna debe tener su propio agrupador
