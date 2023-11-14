@@ -10,6 +10,15 @@
 #+REVEAL_SLIDE_NUMBER: t
 #+REVEAL_HEAD_PREAMBLE: <meta name="description" content="Estadística Computacional">
 #+PROPERTY: header-args:sql :engine postgres :dbhost 0.0.0.0 :port 5432 :dbuser postgres :dbpassword postgres :database postgres
+* Preamble
+#+begin_src sh
+  docker run \
+         -p 5432:5432 \
+         -e POSTGRES_PASSWORD=postgres \
+         -e POSTGRES_INITDB_ARGS="--auth-local=md5" \
+         -d \
+         postgres
+#+end_src
 
 * Intro
 SQL (al parecer se le llama sequel) significa en su base: **Structured Query Language**
