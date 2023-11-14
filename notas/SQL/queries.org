@@ -1,0 +1,317 @@
+#+TITLE: SQL
+#+AUTHOR: Miguel Angel Escalante Serrato
+#+EMAIL:  miguel.escalante@itam.mx
+#+DATE: 9-Nov-21
+#+LANGUAGE:  es
+#+OPTIONS: num:nil toc:nil
+#+REVEAL_THEME: moon
+#+REVEAL_ROOT: https://cdn.jsdelivr.net/npm/reveal.js
+#+REVEAL_TRANS: cube
+#+REVEAL_SLIDE_NUMBER: t
+#+REVEAL_HEAD_PREAMBLE: <meta name="description" content="Estadística Computacional">
+#+PROPERTY: header-args:sql :engine postgres :dbhost 0.0.0.0 :port 5432 :dbuser postgres :dbpassword postgres :database postgres
+
+* Intro
+SQL (al parecer se le llama sequel) significa en su base: **Structured Query Language**
+* Basics Query Language
+** Select
+Select nos ayuda a filtrar las columnas que vamos a pedir de nuestra base de datos
+*** Una Columna
+#+begin_src sql
+  select  year from flights limit 5;
+#+end_src
+
+*** Varias columnas
+#+begin_src sql
+select year, month from flights limit 5;
+#+end_src
+
+*** Renombrar variables
+#+begin_src sql
+select year as agno, month as mes, day as dia from flights limit 10;
+#+end_src
+
+*** Seleccionar todas las variables
+
+#+begin_src sql
+select * from flights limit 5;
+#+end_src
+
+** Where
+Where es el verbo que nos ayuda a filtrar renglones dentro del lenguaje:
+#+begin_src sql
+  select month, day from flights
+   where month = 12 limit 10;
+#+end_src
+
+#+begin_src sql
+  select month, day from flights
+   where month = 12 and day=12 limit 10;
+#+end_src
+
+** Count
+Nos ayuda a contar los renglones que tenemos
+#+begin_src sql
+  select count(*) from flights;
+#+end_src
+
+** distinct
+Nos ayuda a encontrar los valores únicos en las tablas.
+#+begin_src sql
+  select distinct month, day  from flights;
+#+end_src
+
+** Subqueries
+
+#+begin_src sql
+  select count(*) from (select distinct month, day from flights) md;
+#+end_src
+
+#+RESULTS:
+| count |
+|-------|
+|   365 |
+
+** CTE's
+
+Common Table expressions es una especie de tabla temporal que construímos para hacer más sencillo el query que necesitemos hacer.
+#+begin_src sql
+  with md as (select distinct month, day from flights),
+    mdy as (select distinct year, month, day from flights)
+  select mdy.year from mdy limit 10;
+#+end_src
+
+#+RESULTS:
+| year |
+|------|
+| 2013 |
+| 2013 |
+| 2013 |
+| 2013 |
+| 2013 |
+| 2013 |
+| 2013 |
+| 2013 |
+| 2013 |
+| 2013 |
+
+** Order by
+Ordena los resultados dada alguna regla establecida.
+#+begin_src sql
+select distinct month, day from flights order by month, day;
+#+end_src
+
+** concat
+Nos ayuda a juntar varias columnas en una sola.
+#+begin_src sql
+select concat(month,'-',day,'-',year) from flights limit 10;
+#+end_src
+
+** Parseo
+
+Nos ayuda a castear algún tipo en otro tipo, para mayor referencia de los tipos de datos en pg [[https://www.postgresql.org/docs/current/datatype.html][ver acá]].
+
+#+begin_src sql
+  select concat(month,'-',day,'-',year)::date from flights limit 10;
+#+end_src
+
+** split
+#+begin_src sql
+  with tabla as (select concat(month,'-',day,'-',year) as fecha from flights)
+  select split_part(fecha,'-',3) as lol  from tabla limit 10;
+#+end_src
+
+** group by
+agrupamos y hacemos una función sobre cada uno de los grupos.
+#+begin_src sql
+  select month, count(*) as num_flights
+    from flights
+   group by month;
+#+end_src
+
+
+*** multiples columnas:
+Cada columna debe tener su propio agrupador
+#+begin_src sql
+  SELECT month,   count(distinct day) as days_month,  count(distinct dest),count(*) as num_flights
+    FROM flights
+   GROUP BY month;
+#+end_src
+
+*** Filtros ¿?
+#+begin_src sql
+  select month, count(*) as num_flights
+    from flights
+   group by month
+   where num_flights>20000;
+#+end_src
+
+** having
+en lugar de usar where cuando tenemos grupos, usamos having.
+#+begin_src sql
+  select month, count(*) as num_flights
+    from flights
+   group by month
+   having count(*) > 28000;
+#+end_src
+
+** Case
+Se usa a manera de ifelse
+#+begin_src sql
+  select month , case
+                 when month < 4  then 'Q1'
+                 when month < 7  then 'Q2'
+                 when month < 10 then 'Q3'
+                 when month < 13 then 'Q4'
+                 end as mes
+    from flights
+   where month=9 limit 10;
+#+end_src
+
+* Insert
+
+#+begin_src sql
+  truncate meses;
+  drop table meses;
+
+  create table meses (mes integer, n integer, days_month integer);
+
+  insert into meses
+   select month, count(*), count(distinct day)
+    from flights
+   group by month;
+  select * from meses;
+#+end_src
+
+
+#+begin_src sql
+  insert into meses
+   select month, count(*) as num_flights
+    from flights
+   group by month;
+ explain analyze select * from meses;
+
+#+end_src
+
+#+begin_src sql
+  delete from meses where mes = 12 or mes=1;
+  insert into meses
+   select month, count(*) as num_flights
+    from flights
+   group by month;
+  select * from meses;
+
+#+end_src
+
+#+begin_src sql
+  delete from meses;
+  insert into meses
+   select month, count(*) as num_flights
+    from flights
+   group by month;
+  select * from meses;
+#+end_src
+
+
+#+begin_src sql
+  truncate meses;
+  select * from meses;
+#+end_src
+* Explain analyze
+#+begin_src sql
+  explain analyze select month, day from flights where month =1;
+#+end_src
+
+                     |
+#+begin_src sql
+explain analyze  select * from meses where mes=1;
+#+end_src
+
+** indices
+#+begin_src sql
+create index on meses ((mes));
+#+end_src
+
+#+begin_src sql
+\d flights
+#+end_src
+
+* Joins
+** Insert data
+ [[https://en.wikipedia.org/wiki/Join_(SQL)][Fuente del ejemplo]].
+
+#+begin_src sql
+  drop table employee;
+  drop table department;
+
+
+  CREATE TABLE department(
+      DepartmentID INT PRIMARY KEY NOT NULL,
+      DepartmentName VARCHAR(20)
+  );
+
+  CREATE TABLE employee (
+      LastName VARCHAR(20),
+      DepartmentID INT REFERENCES department(DepartmentID)
+  );
+
+  INSERT INTO department
+  VALUES (31, 'Sales'),
+         (33, 'Engineering'),
+         (34, 'Clerical'),
+         (35, 'Marketing');
+
+  INSERT INTO employee
+  VALUES ('Rafferty', 31),
+         ('Jones', 33),
+         ('Heisenberg', 33),
+         ('Robinson', 34),
+         ('Smith', 34),
+         ('Williams', NULL);
+#+end_src
+
+** Inner Join
+
+#+begin_src sql
+SELECT employee.LastName, employee.DepartmentID, department.DepartmentName
+FROM employee
+INNER JOIN department ON
+employee.DepartmentID = department.DepartmentID;
+#+end_src
+
+** Left Join
+
+[[file:img/SQL_Join_-_01_A_Left_Join_B.svg.png]]
+
+#+begin_src sql
+SELECT *
+FROM employee
+LEFT JOIN department ON employee.DepartmentID = department.DepartmentID;
+#+end_src
+
+#+RESULTS:
+| lastname   | departmentid | departmentid | departmentname |
+|------------+--------------+--------------+----------------|
+| Rafferty   |           31 |           31 | Sales          |
+| Jones      |           33 |           33 | Engineering    |
+| Heisenberg |           33 |           33 | Engineering    |
+| Robinson   |           34 |           34 | Clerical       |
+| Smith      |           34 |           34 | Clerical       |
+| Williams   |              |              |                |
+
+** Right Join
+[[file:img/SQL_Join_-_03_A_Right_Join_B.svg.png]]
+#+begin_src sql
+SELECT *
+FROM employee RIGHT JOIN department
+  ON employee.DepartmentID = department.DepartmentID;
+#+end_src
+
+** Full Join
+[[file:img/SQL_Join_-_05b_A_Full_Join_B.svg.png]]
+#+begin_src sql
+SELECT *
+FROM employee FULL JOIN department
+  ON employee.DepartmentID = department.DepartmentID;
+#+end_src
+
