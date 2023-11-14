@@ -20,6 +20,31 @@
          postgres
 #+end_src
 
+#+begin_src R
+
+  library(dplyr)
+  library(dbplyr)
+  dotenv::load_dot_env(file='.env')
+  con <- DBI::dbConnect(
+                RPostgreSQL::PostgreSQL(),
+                host = Sys.getenv("PG_HOST"),
+                user = Sys.getenv("PG_USR"),
+                password = Sys.getenv("PG_PASS")
+              )
+  copy_to(
+    con, nycflights13::flights, "flights",
+    overwrite=TRUE, temporary = FALSE,
+    indexes = list(
+        c("year", "month", "day"),
+        "carrier",
+        "tailnum",
+        "dest"
+    )
+)
+#+end_src
+
+#+RESULTS:
+
 * Intro
 SQL (al parecer se le llama sequel) significa en su base: **Structured Query Language**
 * Basics Query Language
