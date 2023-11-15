@@ -10,6 +10,38 @@
 #+REVEAL_SLIDE_NUMBER: t
 #+REVEAL_HEAD_PREAMBLE: <meta name="description" content="Estadística Computacional">
 #+PROPERTY: header-args:sql :engine postgres :dbhost 0.0.0.0 :port 5432 :dbuser postgres :dbpassword postgres :database postgres
+* Preamble
+#+begin_src sh
+  docker run \
+         -p 5432:5432 \
+         -e POSTGRES_PASSWORD=postgres \
+         -e POSTGRES_INITDB_ARGS="--auth-local=md5" \
+         -d \
+         postgres
+#+end_src
+
+#+begin_src R
+
+  library(dplyr)
+  library(dbplyr)
+  dotenv::load_dot_env(file='.env')
+  con <- DBI::dbConnect(
+                RPostgreSQL::PostgreSQL(),
+                host = Sys.getenv("PG_HOST"),
+                user = Sys.getenv("PG_USR"),
+                password = Sys.getenv("PG_PASS")
+              )
+  copy_to(
+    con, nycflights13::flights, "flights",
+    overwrite=TRUE, temporary = FALSE,
+    indexes = list(
+      c("year", "month", "day"),
+      "carrier",
+      "tailnum",
+      "dest"
+    )
+  )
+#+end_src
 
 * Intro
 SQL (al parecer se le llama sequel) significa en su base: **Structured Query Language**
@@ -17,18 +49,19 @@ SQL (al parecer se le llama sequel) significa en su base: **Structured Query Lan
 ** Select
 Select nos ayuda a filtrar las columnas que vamos a pedir de nuestra base de datos
 *** Una Columna
+
 #+begin_src sql
-  select  year from flights limit 5;
+  select year from flights limit 5;
 #+end_src
 
 *** Varias columnas
 #+begin_src sql
-select year, month from flights limit 5;
+  select year, month from flights limit 5;
 #+end_src
 
 *** Renombrar variables
 #+begin_src sql
-select year as agno, month as mes, day as dia from flights limit 10;
+  select year as agno, month as mes, day as dia from flights limit 10;
 #+end_src
 
 *** Seleccionar todas las variables
@@ -47,6 +80,8 @@ Where es el verbo que nos ayuda a filtrar renglones dentro del lenguaje:
 #+begin_src sql
   select month, day from flights
    where month = 12 and day=12 limit 10;
+  -- where month = 12 and (day=12 or day=15) limit 10;
+  -- where month<12 and month >11;
 #+end_src
 
 ** Count
@@ -54,6 +89,7 @@ Nos ayuda a contar los renglones que tenemos
 #+begin_src sql
   select count(*) from flights;
 #+end_src
+
 
 ** distinct
 Nos ayuda a encontrar los valores únicos en las tablas.
@@ -64,13 +100,8 @@ Nos ayuda a encontrar los valores únicos en las tablas.
 ** Subqueries
 
 #+begin_src sql
-  select count(*) from (select distinct month, day from flights) md;
+  select count(*) as conteo from (select distinct f.month, f.day from flights f) md;
 #+end_src
-
-#+RESULTS:
-| count |
-|-------|
-|   365 |
 
 ** CTE's
 
@@ -81,30 +112,16 @@ Common Table expressions es una especie de tabla temporal que construímos para 
   select mdy.year from mdy limit 10;
 #+end_src
 
-#+RESULTS:
-| year |
-|------|
-| 2013 |
-| 2013 |
-| 2013 |
-| 2013 |
-| 2013 |
-| 2013 |
-| 2013 |
-| 2013 |
-| 2013 |
-| 2013 |
-
 ** Order by
 Ordena los resultados dada alguna regla establecida.
 #+begin_src sql
-select distinct month, day from flights order by month, day;
+select distinct month, day from flights order by month desc, day;
 #+end_src
 
 ** concat
 Nos ayuda a juntar varias columnas en una sola.
 #+begin_src sql
-select concat(month,'-',day,'-',year) from flights limit 10;
+select concat(month,'-',day,'-',year) as date_mdy from flights limit 10;
 #+end_src
 
 ** Parseo
@@ -112,23 +129,36 @@ select concat(month,'-',day,'-',year) from flights limit 10;
 Nos ayuda a castear algún tipo en otro tipo, para mayor referencia de los tipos de datos en pg [[https://www.postgresql.org/docs/current/datatype.html][ver acá]].
 
 #+begin_src sql
-  select concat(month,'-',day,'-',year)::date from flights limit 10;
+  select concat(month,'-',day,'-',year)::date as date from flights limit 10;
 #+end_src
 
 ** split
+
 #+begin_src sql
   with tabla as (select concat(month,'-',day,'-',year) as fecha from flights)
-  select split_part(fecha,'-',3) as lol  from tabla limit 10;
+  select split_part(fecha,'-',3) as year  from tabla limit 10;
 #+end_src
 
 ** group by
 agrupamos y hacemos una función sobre cada uno de los grupos.
+
 #+begin_src sql
-  select month, count(*) as num_flights
+  select month, day, count(*) as num_flights
     from flights
-   group by month;
+   group by month, day;
 #+end_src
 
+#+begin_src sql
+  --Ejercicio al lector
+    -- ¿Cuál es el promedio de vuelos diarios por mes ?
+  with recuento_diario as (
+    select month, day, count(*) as num_flights
+      from flights
+     group by month, day
+  ) select month, avg(num_flights) as daily_avg
+             from recuento_diario
+     group by month;
+#+end_src
 
 *** multiples columnas:
 Cada columna debe tener su propio agrupador
