@@ -40,3 +40,7 @@ Se requiere de un dashboard para poder interactuar con toda la aplicación, por 
 ** Documentación del código
 
 ** Funcionamiento del código
+
+* Fecha de entrega
+
+Día del examen final.
