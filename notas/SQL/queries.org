@@ -177,18 +177,23 @@ Agrupamos y hacemos una función sobre cada uno de los grupos.
 *** multiples columnas:
 Cada columna debe tener su propio agrupador
 #+begin_src sql
-  SELECT month,   count(distinct day) as days_month,  count(distinct dest),count(*) as num_flights
+  SELECT
+    month, count(distinct day) as days_month,  count(distinct dest), count(*) as num_flights
     FROM flights
    GROUP BY month;
 #+end_src
+
 
 *** Filtros ¿?
 #+begin_src sql
   select month, count(*) as num_flights
     from flights
    group by month
-   where num_flights>20000;
+   where num_flights>28000;
 #+end_src
+
+#+RESULTS:
+|---|
 
 ** having
 en lugar de usar where cuando tenemos grupos, usamos having.
@@ -207,15 +212,13 @@ Se usa a manera de ifelse
                  when month < 7  then 'Q2'
                  when month < 10 then 'Q3'
                  when month < 13 then 'Q4'
-                 end as mes
+                 end as quarter
     from flights
    where month=9 limit 10;
 #+end_src
-
 * Insert
 
 #+begin_src sql
-
   truncate meses;
 
   drop table meses;
@@ -228,7 +231,7 @@ Se usa a manera de ifelse
   insert into meses
   select month, count(*)
     from flights
-   group by month;
+    group by month;
   select * from meses;
 #+end_src
 

@@ -115,6 +115,7 @@ copy_to(
         "dest"
     )
 )
+
 ```
 
 Así se accede a la base de datos y se puede trabajar como los `tibbles` que ya conoces con un par de modificaciones.
