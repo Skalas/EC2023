@@ -1,0 +1,46 @@
+#+TITLE: Proyecto Final EC2022
+#+AUTHOR: Prof. Miguel Angel Escalante Serrato
+#+EMAIL:  miguel.escalante@itam.mx
+#+DATE: 15-Nov-2023
+#+STARTUP: showall
+
+* Producto de Datos.
+
+El objetivo del proyecto es implementar y empaquetar un producto de datos completo, para que puedan practicar las herramientas que hemos hecho durante el curso. Los temas a evaluar son los siguientes:
+- Python
+- SQL
+- APIs
+- Dashboards
+
+* Requermientos
+
+Se pide un producto de datos completo, esto es que tenga todos los componentes necesarios para que sea un análisis vivo y creciente de la información que va llegando al modelo. Esto compone principalmente 5 etapas.
+
+** Base de datos de soporte
+Los datos deben de guardarse en un PostgreSQL, esto para replicar la necesidad de motores externos de bases de datos en la vida real.
+
+** Carga de información inicial
+Se necesita que el dashboard funcione desde el inicio, por lo que se tiene que tener una carga inicial a la bd.
+
+** Modelo como servicio Web
+Su API debe tener un modelo de ML corriendo a manera de servicio, esto es, si le mando una nueva observación, debe de responder con la predicción que tiene para la misma.
+
+** Dashboard
+Se requiere de un dashboard para poder interactuar con toda la aplicación, por lo que se pide un dashboard en shiny (o dash) para interactuar con todas las partes antes mencionadas.
+
+** Ambiente totalmente reproducible
+ "Corre en mi máquina" son palabras que no podrán articular como entrega en este proyecto. Ya que no entregan sus máquinas al cliente para que usen su modelo, tienen que aprender a empaquetar su producto correctamente.
+
+* Aspectos a evaluar
+
+** Limpieza de código
+
+** Claridad de explicación del problema de negocio
+
+** Documentación del código
+
+** Funcionamiento del código
+
+* Fecha de entrega
+
+Día del examen final.
