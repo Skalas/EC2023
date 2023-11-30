@@ -1,0 +1,28 @@
+version: '3.7'
+
+services:
+  db:
+    image: "postgres"
+    
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: trust
+    volumes:
+      - ./data/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./data/flights.csv:/data/flights.csv
+      - pg_api:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+  web:
+    build: ./api
+    env_file:
+      - ".env"
+    ports:
+      - 8080:8080
+    depends_on:
+      - "db"
+  shiny: 
+    build: ./shiny
+    ports:
+      - 5000:4999
+volumes:
+  pg_api:
