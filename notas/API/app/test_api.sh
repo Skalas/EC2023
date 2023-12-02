@@ -1,6 +1,6 @@
 curl -X POST -H "Content-Type: application/json"\
-     -d '{"name":"Pedro", "lastname":"Pérez", "age":33}'\
-     0.0.0.0:8080/user
+     -d '[{"name":"Pedro", "lastname":"Pérez", "age":33}, {"name":"Luis", "lastname":"Hernández", age: 37}]'\
+     localhost:8080/users
 
 curl -X DELETE '0.0.0.0:8080/user?id=2'
 

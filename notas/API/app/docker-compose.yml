@@ -20,7 +20,7 @@ services:
       - 8080:8080
     depends_on:
       - "db"
-  shiny: 
+  shiny:
     build: ./shiny
     ports:
       - 5000:4999

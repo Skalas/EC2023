@@ -20,9 +20,10 @@ create table flights(
     time_hour timestamp
 );
 COPY flights
-FROM '/data/flights.csv' 
-DELIMITER ',' 
-CSV HEADER
-NULL as 'NA';
+  FROM '/data/flights.csv'
+  DELIMITER ','
+  CSV HEADER
+  NULL as 'NA';
+
 create table users (id serial Primary key, name varchar, lastname varchar, age integer);
-insert into users (name, lastname,age) values ('Miguel', 'Escalante', '32');
+insert into users (name, lastname,age) values ('Miguel', 'Escalante', '34');

@@ -3,6 +3,7 @@ import json
 import psycopg2
 import psycopg2.extras
 import os
+
 # Estructura del uri:
 # "motor://user:password@host:port/database"
 database_uri = f'postgresql://{os.environ["PGUSR"]}:{os.environ["PGPASS"]}@{os.environ["PGHOST"]}:5432/{os.environ["PGDB"]}'
@@ -10,64 +11,71 @@ database_uri = f'postgresql://{os.environ["PGUSR"]}:{os.environ["PGPASS"]}@{os.e
 app = Flask(__name__)
 conn = psycopg2.connect(database_uri)
 
-@app.route('/')
-def home():
+
+def execute_query(query, conn=conn):
     cur = conn.cursor(cursor_factory=psycopg2.extras.NamedTupleCursor)
-    cur.execute("select * from users")
-    results = cur.fetchall()
+    try:
+        cur.execute(query)
+        results = cur.fetchall()
+    except Exception as e:
+        print(f"Error on the query: {e}")
+        results = []
     cur.close()
     return json.dumps([x._asdict() for x in results], default=str)
 
 
-@app.route('/users', methods=["POST", "GET", "DELETE", "PATCH"])
-def user():
-    if request.method == 'GET':
-        cur = conn.cursor(cursor_factory=psycopg2.extras.NamedTupleCursor)
-        user_id = request.args.get("id")
-        cur.execute(f"select * from users where id={user_id}")
-        results = cur.fetchone()
-        cur.close()
-        return json.dumps(results._asdict(), default=str)
-    if request.method == "POST":
-        user = json.loads(request.data)
-        cur = conn.cursor()
-        cur.execute(
-            "insert into users (name, lastname, age) values (%s, %s, %s)",
-            (user[0]["name"], user[0]["lastname"], user[0]["age"]),
-        )
+def send_data(query, conn=conn):
+    cur = conn.cursor()
+    try:
+        cur.execute(query)
         conn.commit()
-        cur.execute("SELECT LASTVAL()")
-        user_id = cur.fetchone()[0]
-        cur.close()
+    except Exception as e:
+        print(f"Error at the insert: {e}")
+        user_id = ""
+    cur.close()
+
+
+@app.route("/")
+def home():
+    query = "select * from users"
+    return execute_query(query)
+
+
+@app.route("/users", methods=["GET", "POST", "DELETE", "PATCH"])
+def users():
+    if request.method == "GET":
+        user_id = request.args.get("id")
+        if user_id:
+            query = f"select * from users where id={user_id}"
+            return execute_query(query)
+        else:
+            query = "select * from users"
+            return execute_query(query)
+    if request.method == "POST":
+        users = json.loads(request.data)
+        for user in users:
+            query = f"insert into users (name, lastname, age) values ('{user['name']}', '{user['lastname']}', '{user['age']}')"
+            send_data(query)
+            user_id = execute_query("SELECT LASTVAL()")[0]
         return json.dumps({"user_id": user_id})
     if request.method == "DELETE":
-        cur = conn.cursor()
         user_id = request.args.get("id")
-        cur.execute(f"delete from users where id={user_id}")
-        conn.commit()
-        cur.close()
+        if user_id:
+            send_data(f"delete from users where id={user_id}")
         return json.dumps({"user_id": user_id})
     if request.method == "PATCH":
-        user = json.loads(request.data)
-        cur = conn.cursor()
         user_id = request.args.get("id")
-        cur.execute(
-            "update users set (name, lastname, age) = (%s,%s,%s) where id=%s ",
-            (user[0]["name"], user[0]["lastname"], user[0]["age"], user_id),
-        )
-        conn.commit()
-        cur.close()
+        users = json.loads(request.data)
+        for user in users:
+            query = f"update users set (name, lastname, age) =  ('{user['name']}', '{user['lastname']}', '{user['age']}') where id={user_id}"
+            send_data(query)
         return json.dumps({"user_id": user_id})
 
 
-@app.route('/flights', methods=['GET'])
+@app.route("/flights", methods=["GET"])
 def flights():
-    cur = conn.cursor(cursor_factory=psycopg2.extras.NamedTupleCursor)
-    user_id = request.args.get("id")
-    cur.execute(f"select * from flights limit 100")
-    results = cur.fetchall()
-    cur.close()
-    return json.dumps([x._asdict() for x in results], default=str)
+    query = "select * from flights limit 100"
+    return execute_query(query)
 
 
 if __name__ == "__main__":

@@ -8,7 +8,7 @@ library(DT)
 ui <- fluidPage(
 
     # Application title
-    titlePanel("Test Dashboard for EC2022"),
+    titlePanel("Test Dashboard for EC2023"),
 
     # Sidebar with a slider input for number of bins 
     sidebarLayout(
@@ -38,7 +38,7 @@ server <- function(input, output) {
 
     output$users = renderDataTable({
         print(input$save)
-        resp <- GET('web:8080/')
+        resp <- GET('web:8080/users')
         df <- fromJSON(content(resp, as='text'))
         df
     })
